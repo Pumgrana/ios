@@ -10,9 +10,23 @@
 
 @implementation Tag
 
+/**
+ * Default raw constructor. Not used.
+ */
 - (id)initWithLabel:(NSString *)l
 {
+    self.id = @1;
     self.label = l;
+    return self;
+}
+
+/**
+ * Constructor based on a tag serialized in JSON coming from the response of the API.
+ */
+- (id)initFromJson:(NSDictionary *)json
+{
+    self.id = [json objectForKey:@"_id"];
+    self.label = [json objectForKey:@"subject"];
     return self;
 }
 

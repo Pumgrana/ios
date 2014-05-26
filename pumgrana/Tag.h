@@ -10,8 +10,10 @@
 
 @interface Tag : NSObject
 
+@property (nonatomic, strong) NSNumber *id;
 @property (nonatomic, strong) NSString *label;
 
 - (id)initWithLabel:(NSString *)l;
+- (id)initFromJson:(NSDictionary *)json;
 
 @end

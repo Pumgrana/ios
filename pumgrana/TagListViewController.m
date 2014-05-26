@@ -38,6 +38,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (self.contentListView)
+        self.usedView = self.contentListView;
+    else
+        self.usedView = self.contentEditView;
+    
+    [self.tagListTable reloadData];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -59,7 +69,18 @@
     
     Tag *tag = [self.tags objectAtIndex:indexPath.row];
     cell.textLabel.text = tag.label;
-    cell.imageView.image = [UIImage imageNamed:@"border.png"];
+    
+    BOOL alreadyExists = NO;
+    for (Tag *t in self.usedView.filteredTags) {
+        if ([t.label isEqualToString:tag.label]) {
+            alreadyExists = YES;
+            cell.imageView.image = [UIImage imageNamed:@"tick-and-border.png"];
+            break ;
+        }
+    }
+    if (!alreadyExists)
+        cell.imageView.image = [UIImage imageNamed:@"border.png"];
+    
     return cell;
 }
 
@@ -69,9 +90,9 @@
     Tag *tag = [self.tags objectAtIndex:indexPath.row];
     BOOL alreadyExists = NO;
     
-    for (Tag *t in self.contentListView.filteredTags) {
-        if (t.label == tag.label) {
-            [self.contentListView.filteredTags removeObject:t];
+    for (Tag *t in self.usedView.filteredTags) {
+        if ([t.label isEqualToString:tag.label]) {
+            [self.usedView.filteredTags removeObject:t];
             alreadyExists = YES;
             cell.imageView.image = [UIImage imageNamed:@"border.png"];
             break ;
@@ -79,7 +100,7 @@
     }
     
     if (!alreadyExists) {
-        [self.contentListView.filteredTags addObject:tag];
+        [self.usedView.filteredTags addObject:tag];
         cell.imageView.image = [UIImage imageNamed:@"tick-and-border.png"];
     }
 }

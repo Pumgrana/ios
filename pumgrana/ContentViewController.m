@@ -9,6 +9,7 @@
 #import "ContentViewController.h"
 #import "AppDelegate.h"
 #import "ContentListViewController.h"
+#import "ApiManager.h"
 
 @interface ContentViewController ()
 
@@ -22,6 +23,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(buttonEditPush:)];
     }
     return self;
 }
@@ -31,6 +33,10 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    if (self.contentEditView == nil) {
+        ContentEditViewController *viewController = [[ContentEditViewController alloc] initWithNibName:@"ContentEditViewController" bundle:[NSBundle mainBundle]];
+        self.contentEditView = viewController;
+    }
     if (self.contentTagListView == nil) {
         ContentTagListViewController *viewController = [[ContentTagListViewController alloc] initWithNibName:@"ContentTagListViewController" bundle:[NSBundle mainBundle]];
         self.contentTagListView = viewController;
@@ -53,6 +59,21 @@
     
     self.labelTitle.text = self.content.title;
     self.textViewDescription.text = self.content.description;
+    self.navigationItem.rightBarButtonItem = self.editButton;
+}
+
+- (IBAction)buttonEditPush:(id)sender;
+{
+    AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
+    [nav pushViewController:self.contentEditView animated:YES];
+    
+    self.contentEditView.title = @"Edit";
+    self.contentEditView.content = self.content;
+    self.contentEditView.currentTitle = self.content.title;
+    self.contentEditView.currentDescription = self.content.description;
+    self.contentEditView.allTags = [ApiManager getTags];
+    self.contentEditView.filteredTags = [[NSMutableArray alloc] initWithArray:self.content.tags];
 }
 
 - (IBAction)buttonTagsPush:(id)sender

@@ -10,6 +10,7 @@
 #import "Content.h"
 #import "Tag.h"
 #import "TagListViewController.h"
+#import "ApiManager.h"
 
 @interface ContentListViewController ()
 
@@ -91,18 +92,30 @@
 {
     [super viewWillAppear:animated];
     
+    self.allTags = [ApiManager getTags];
+     
     if (self.contents == nil) {
+        /*
         Tag *tag1 = [[Tag alloc] initWithLabel:@"Tag test 1"];
         Tag *tag2 = [[Tag alloc] initWithLabel:@"Tag test 2"];
         Content *content1 = [[Content alloc] initWithTitle:@"Content 1" description:@"This is the first content." tags:[[NSMutableArray alloc] initWithObjects:tag1, nil] links:[[NSMutableArray alloc] initWithObjects:nil]];
         Content *content2 = [[Content alloc] initWithTitle:@"Content 2" description:@"This is the second content." tags:[[NSMutableArray alloc] initWithObjects:tag2, nil] links:[[NSMutableArray alloc] initWithObjects:content1, nil]];
     
         self.contents = [[NSMutableArray alloc] initWithObjects:content1, content2, nil];
+        */
+        
+        self.contents = [ApiManager getContents];
+        for (Content *content in self.contents) {
+            [ApiManager getContentLinks:content contents:self.contents];
+            [ApiManager getContentTags:content tags:self.allTags];
+        }
     }
   
+    /*
     // **
     // Making an array of every tag
     // **
+    
     self.allTags = [[NSMutableArray alloc] init];
     
     for (Content *c in self.contents) {
@@ -122,6 +135,8 @@
             }
         }
     }
+    */
+    
 
     
     // **

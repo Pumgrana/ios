@@ -11,7 +11,14 @@
 
 @interface ContentTagListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
+/**
+ * The content we want to display the tags.
+ */
 @property (nonatomic, strong) Content *content;
+
+/**
+ * The table containing the tags to display.
+ */
 @property (weak, nonatomic) IBOutlet UITableView *tagTableView;
 
 @end
