@@ -12,36 +12,29 @@
 @implementation Content
 
 /**
- * Default raw constructor. Not used.
- */
-- (id)initWithTitle: (NSString *)t description:(NSString *)d tags:(NSMutableArray *)ta links:(NSMutableArray *)lks
-{
-    self.id = @1;
-    self.title = t;
-    self.description = d;
-    self.tags = ta;
-    self.links = lks;
-    return self;
-}
-
-/**
- * Constructor based on a content serialized in JSON coming from the response of the API.
+ * Constructor based on a content serialized in JSON coming from the response of the API
+ * @param json A JSON content deserialized as a dictionary
  */
 - (id)initFromJson:(NSDictionary *)json
 {
     self.id = [json objectForKey:@"_id"];
     self.title = [json objectForKey:@"title"];
-    self.description = [json objectForKey:@"text"];
+    self.summary = [json objectForKey:@"summary"];
+    self.text = [json objectForKey:@"text"];
+    self.tags = [[NSMutableArray alloc] init];
+    self.links = [[NSMutableArray alloc] init];
     return self;
 }
 
 /**
- * Returns YES if the content has the specified tag with its name in parameter.
+ * Tests if the content has a given tag
+ * @param tag The tag to search for
+ * @return YES or NO whether the content has the tag or not
  */
-- (BOOL)hasTag: (NSString *)tag
+- (BOOL)hasTag: (Tag *)tag
 {
     for (Tag *t in self.tags) {
-        if (tag == t.label)
+        if ([tag isEqualToTag:t])
             return YES;
     }
     

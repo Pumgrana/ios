@@ -21,7 +21,7 @@
 + (NSMutableArray *)getContents;
 + (NSMutableArray *)getTags;
 + (Content *)getContentLinks:(Content *)content contents:(NSMutableArray *)contents;
-+ (Content *)getContentTags:(Content *)content tags:(NSMutableArray *)tags;
++ (NSMutableArray *)getContentTags:(Content *)content;
 + (void)updateContent:(Content *)content;
 + (void)insertContent:(Content *)content;
 

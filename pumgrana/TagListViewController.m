@@ -14,14 +14,14 @@
 @end
 
 @implementation TagListViewController
-@synthesize contentListView;
-@synthesize tags;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.tags = [[NSMutableArray alloc] init];
+        self.selectedTags = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -30,6 +30,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.title = @"Tags";
 }
 
 - (void)didReceiveMemoryWarning
@@ -40,11 +41,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    if (self.contentListView)
-        self.usedView = self.contentListView;
-    else
-        self.usedView = self.contentEditView;
-    
     [self.tagListTable reloadData];
 }
 
@@ -71,8 +67,8 @@
     cell.textLabel.text = tag.label;
     
     BOOL alreadyExists = NO;
-    for (Tag *t in self.usedView.filteredTags) {
-        if ([t.label isEqualToString:tag.label]) {
+    for (Tag *t in self.selectedTags) {
+        if ([t isEqualToTag:tag]) {
             alreadyExists = YES;
             cell.imageView.image = [UIImage imageNamed:@"tick-and-border.png"];
             break ;
@@ -80,7 +76,7 @@
     }
     if (!alreadyExists)
         cell.imageView.image = [UIImage imageNamed:@"border.png"];
-    
+
     return cell;
 }
 
@@ -90,9 +86,9 @@
     Tag *tag = [self.tags objectAtIndex:indexPath.row];
     BOOL alreadyExists = NO;
     
-    for (Tag *t in self.usedView.filteredTags) {
-        if ([t.label isEqualToString:tag.label]) {
-            [self.usedView.filteredTags removeObject:t];
+    for (Tag *t in self.selectedTags) {
+        if ([t isEqualToTag:tag]) {
+            [self.selectedTags removeObject:t];
             alreadyExists = YES;
             cell.imageView.image = [UIImage imageNamed:@"border.png"];
             break ;
@@ -100,9 +96,19 @@
     }
     
     if (!alreadyExists) {
-        [self.usedView.filteredTags addObject:tag];
+        [self.selectedTags addObject:tag];
         cell.imageView.image = [UIImage imageNamed:@"tick-and-border.png"];
     }
+}
+
+
+
+
+
+- (void)loadDataWithTags:(NSMutableArray *)tags selectedTags:(NSMutableArray *)selectedTags
+{
+    self.tags = tags;
+    self.selectedTags = selectedTags;
 }
 
 @end

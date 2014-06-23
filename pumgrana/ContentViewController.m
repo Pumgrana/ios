@@ -58,7 +58,7 @@
     [super viewWillAppear:animated];
     
     self.labelTitle.text = self.content.title;
-    self.textViewDescription.text = self.content.description;
+    self.textViewDescription.text = self.content.text;
     self.navigationItem.rightBarButtonItem = self.editButton;
 }
 
@@ -71,7 +71,7 @@
     self.contentEditView.title = @"Edit";
     self.contentEditView.content = self.content;
     self.contentEditView.currentTitle = self.content.title;
-    self.contentEditView.currentDescription = self.content.description;
+    self.contentEditView.currentDescription = self.content.text;
     self.contentEditView.allTags = [ApiManager getTags];
     self.contentEditView.filteredTags = [[NSMutableArray alloc] initWithArray:self.content.tags];
 }
@@ -93,7 +93,7 @@
     [nav pushViewController:self.contentListView animated:YES];
     
     self.contentListView.title = @"Links";
-    self.contentListView.contents = self.content.links;
+    self.contentListView.content = self.content;
 }
 
 @end

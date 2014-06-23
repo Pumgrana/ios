@@ -55,7 +55,7 @@
 - (IBAction)buttonSendPush:(id)sender;
 {
     self.content.title = [[NSString alloc] initWithString:self.titleField.text];
-    self.content.description = [[NSString alloc] initWithString:self.contentField.text];
+    self.content.text = [[NSString alloc] initWithString:self.contentField.text];
     self.content.tags = [[NSMutableArray alloc] initWithArray:self.filteredTags];
     
     [ApiManager updateContent:self.content];
@@ -69,8 +69,8 @@
     
     self.currentTitle = [[NSString alloc] initWithString:self.titleField.text];
     self.currentDescription = [[NSString alloc] initWithString:self.contentField.text];
-    self.tagListView.contentEditView = self;
-    self.tagListView.tags = self.allTags;
+     
+    [self.tagListView loadDataWithTags:self.allTags selectedTags:self.filteredTags];
 }
 
 @end

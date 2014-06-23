@@ -15,7 +15,7 @@
  */
 - (id)initWithLabel:(NSString *)l
 {
-    self.id = @1;
+    self.id = @"1";
     self.label = l;
     return self;
 }
@@ -28,6 +28,11 @@
     self.id = [json objectForKey:@"_id"];
     self.label = [json objectForKey:@"subject"];
     return self;
+}
+
+- (BOOL)isEqualToTag:(Tag *)tag
+{
+    return [self.id isEqualToString:tag.id];
 }
 
 @end

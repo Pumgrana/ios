@@ -13,9 +13,9 @@
 @implementation ApiManager
 
 /**
- * Checks if there are no error with the response.
- * @param response Entire response from the API request.
- * @returns YES if everything is ok.
+ * Checks if there are no error with the response
+ * @param response Entire response from the API request
+ * @return YES if everything is ok
  */
 + (BOOL)checkResponseStatus:(NSDictionary *)response
 {
@@ -25,9 +25,12 @@
 }
 
 /**
- * Makes a request to the API.
- * @param urlParams Parameters for the API url.
- * @returns The response or nil if it fails.
+ * Makes a request to the API
+ * @todo asynchronous request
+ * @todo refresh calls
+ * @todo persistance (local db)
+ * @param urlParams Parameters for the API url
+ * @return The response or nil if it fails
  */
 + (id)getJSONResponse:(NSString *)urlParams
 {
@@ -48,8 +51,8 @@
 }
 
 /**
- * Makes an API call to get all the contents.
- * @returns An array of Content objects.
+ * Makes an API call to get all the contents
+ * @return An array of Content objects
  */
 + (NSMutableArray *)getContents
 {
@@ -69,8 +72,8 @@
 }
 
 /**
- * Makes an API call to get all the tags.
- * @returns An array of Tag objects.
+ * Makes an API call to get all the tags
+ * @return An array of Tag objects
  */
 + (NSMutableArray *)getTags
 {
@@ -90,10 +93,10 @@
 }
 
 /**
- * Makes an API call to fill the links of a Content object.
- * @param content The content we want the links.
- * @param contents The array containing all the contents.
- * @returns The original Content object.
+ * Makes an API call to fill the links of a Content object
+ * @param content The content we want the links
+ * @param contents The array containing all the contents
+ * @return The original Content object
  */
 + (Content *)getContentLinks:(Content *)content contents:(NSMutableArray *)contents
 {
@@ -122,40 +125,43 @@
 }
 
 /**
- * Makes an API call to fill the tags of a Content object.
- * @param content The content we want the tags.
- * @param tags The array containing all the tags.
- * @returns The original Content object.
+ * Returns the tag list of a content
+ * @param content The content we want the tags
+ * @return Content's tag list
  */
-+ (Content *)getContentTags:(Content *)content tags:(NSMutableArray *)tags
++ (NSMutableArray *)getContentTags:(Content *)content
 {
     NSString        *url        = @"/tag/list_from_content/";
     NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingFormat:@"%@", content.id]];
+    NSMutableArray  *tags       = [[NSMutableArray alloc] init];
     
     if (response) {
         NSArray *tagArray  = [response objectForKey:@"tags"];
         
-        content.tags = [[NSMutableArray alloc] init];
         for (NSDictionary *tag in tagArray) {
-            NSNumber *id = [tag objectForKey:@"_id"];
-            
-            for (Tag *t in tags) {
-                if ([t.id isEqual:id]) {
-                    [content.tags addObject:t];
-                    break ;
-                }
-            }
+            Tag *newTag = [[Tag alloc] initFromJson:tag];
+            [tags addObject:newTag];
         }
     }
     
-    return (content);
+    return (tags);
 }
 
 + (void)updateContent:(Content *)content
 {
-    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"content_id\":\"%@\",\"title\":\"%@\",\"text\":\"%@\"}", content.id, content.title, content.description];
+    NSMutableString *paramTags  = [[NSMutableString alloc] initWithString:@"["];
+    NSInteger       index       = 0;
+    for (Tag *t in content.tags) {
+        if (index > 0)
+            [paramTags appendString:@","];
+        [paramTags appendFormat:@"\"%@\"", t.id];
+        ++index;
+    }
+    [paramTags appendString:@"]"];
+    
+    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"content_id\":\"%@\",\"title\":\"%@\",\"text\":\"%@\",\"tags_id\":%@}", content.id, content.title, content.text, paramTags];
     NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
-    NSString    *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+    NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     NSString    *baseUrl    = API_URL;
     NSString    *url        = [baseUrl stringByAppendingString:@"/content/update"];
     
@@ -174,9 +180,9 @@
 
 + (void)insertContent:(Content *)content
 {
-    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"title\":\"%@\", \"summary\":\"%@\", \"text\":\"%@\"}", content.title, content.description, content.description];
+    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"title\":\"%@\", \"summary\":\"%@\", \"text\":\"%@\"}", content.title, content.text, content.text];
     NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
-    NSString    *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+    NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     NSString    *baseUrl    = API_URL;
     NSString    *url        = [baseUrl stringByAppendingString:@"/content/insert"];
     

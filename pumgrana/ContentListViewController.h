@@ -10,26 +10,29 @@
 #import "ContentViewController.h"
 #import "AppDelegate.h"
 #import "TagListViewController.h"
-#import "TagListProtocol.h"
 
 @class TagListViewController, ContentViewController;
 
-@interface ContentListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, TagListProtocol>
+@interface ContentListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 /**
  * Label with the list of the filtered tags.
  */
-@property (weak, nonatomic) IBOutlet UILabel *tagList;
+@property (weak, nonatomic) IBOutlet UILabel *tagListLabel;
 
 /**
  * Table to display the contents in.
  */
 @property (nonatomic, strong) IBOutlet UITableView *contentTableView;
 
+
+
+
+
 /**
- * All the contents.
+ * Linked content (if it exists)
  */
-@property (nonatomic, strong) NSMutableArray *contents;
+@property (nonatomic, strong) Content *content;
 
 /**
  * The contents to display.
@@ -46,6 +49,10 @@
  */
 @property (nonatomic, strong) NSMutableArray *filteredTags;
 
+
+
+
+
 /**
  * The view to display the content the user has chosen.
  */
@@ -56,9 +63,16 @@
  */
 @property (nonatomic, strong) TagListViewController *tagListView;
 
-/**
- * When pushing the tags button.
- */
+
+
+
+
 - (IBAction)buttonTagPush:(id)sender;
+
+
+
+
+- (void)updateTagListLabel;
+- (void)manageContentsToShowWithContents:(NSMutableArray *)contents;
 
 @end

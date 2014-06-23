@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "ContentListViewController.h"
 #import "ContentEditViewController.h"
-#import "TagListProtocol.h"
 
 @class ContentListViewController, ContentEditViewController;
 
@@ -20,24 +19,24 @@
  */
 @property (weak, nonatomic) IBOutlet UITableView *tagListTable;
 
-/**
- * The content list view the user is coming from.
- */
-@property (nonatomic, strong) ContentListViewController *contentListView;
 
-/**
- * The content edit view the user is coming from.
- */
-@property (nonatomic, strong) ContentEditViewController *contentEditView;
 
-/**
- * Generic used view
- */
-@property (nonatomic, strong) NSObject<TagListProtocol> *usedView;
+
 
 /**
  * All the tags.
  */
 @property (nonatomic, strong) NSMutableArray *tags;
+
+/**
+ * Already selected tags.
+ */
+@property (nonatomic, strong) NSMutableArray *selectedTags;
+
+
+
+
+
+- (void)loadDataWithTags:(NSMutableArray *)tags selectedTags:(NSMutableArray *)selectedTags;
 
 @end

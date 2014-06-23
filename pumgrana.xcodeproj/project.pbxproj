@@ -92,7 +92,6 @@
 		82BE0D5918F2FF8600D2B810 /* ContentEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentEditViewController.h; sourceTree = "<group>"; };
 		82BE0D5A18F2FF8600D2B810 /* ContentEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentEditViewController.m; sourceTree = "<group>"; };
 		82BE0D5B18F2FF8700D2B810 /* ContentEditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContentEditViewController.xib; sourceTree = "<group>"; };
-		82BE0D5E18F3128800D2B810 /* TagListProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TagListProtocol.h; sourceTree = "<group>"; };
 		82BE0D5F190EB00900D2B810 /* ContentTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentTestCase.m; sourceTree = "<group>"; };
 		82BE0D61190EB64400D2B810 /* TagTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagTestCase.m; sourceTree = "<group>"; };
 		82BE0D63190EB68800D2B810 /* ApiManagerTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApiManagerTestCase.m; sourceTree = "<group>"; };
@@ -166,7 +165,6 @@
 				826B335D183FCB8E00FB8FC0 /* TagListViewController.xib */,
 				826B335A183FCB3100FB8FC0 /* TagListViewController.h */,
 				826B335B183FCB3100FB8FC0 /* TagListViewController.m */,
-				82BE0D5E18F3128800D2B810 /* TagListProtocol.h */,
 				826B334A18340D9300FB8FC0 /* ContentViewController.xib */,
 				826B334718340BB900FB8FC0 /* ContentViewController.h */,
 				826B334818340BB900FB8FC0 /* ContentViewController.m */,

@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "Content.h"
 #import "TagListViewController.h"
-#import "TagListProtocol.h"
 
 @class TagListViewController;
 
-@interface ContentEditViewController : UIViewController <TagListProtocol>
+@interface ContentEditViewController : UIViewController
 
 @property (nonatomic, strong) NSString *currentTitle;
 @property (nonatomic, strong) NSString *currentDescription;

@@ -28,6 +28,7 @@
     [super tearDown];
 }
 
+/*
 - (void)testTagExists
 {
     Tag             *tag1 = [[Tag alloc] initWithLabel:@"Tag 1"];
@@ -46,5 +47,6 @@
     
     XCTAssertEqual([c hasTag:@"Tag 1"], NO, @"Shouldn't have found the tag");
 }
+*/
 
 @end

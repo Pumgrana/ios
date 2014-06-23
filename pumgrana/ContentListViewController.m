@@ -20,12 +20,19 @@
 @synthesize contentTableView;
 @synthesize filteredTags;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithCoder:aDecoder];
     if (self) {
-        // Custom initialization
+        self.content = nil;
+        self.contentsToShow = [[NSMutableArray alloc] init];
+        self.allTags = [[NSMutableArray alloc] init];
+        self.filteredTags = [[NSMutableArray alloc] init];
+        
+        self.contentView = nil;
+        self.tagListView = nil;
     }
+    
     return self;
 }
 
@@ -34,6 +41,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    // Lower views creation
     if (self.contentView == nil) {
         ContentViewController *viewController = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:[NSBundle mainBundle]];
         self.contentView = viewController;
@@ -42,8 +50,6 @@
         TagListViewController *viewController = [[TagListViewController alloc] initWithNibName:@"TagListViewController" bundle:[NSBundle mainBundle]];
         self.tagListView = viewController;
     }
-    
-    self.filteredTags = [[NSMutableArray alloc] init];
 }
 
 - (void)didReceiveMemoryWarning
@@ -88,99 +94,92 @@
     self.contentView.content = content;
 }
 
+
+
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    self.allTags = [ApiManager getTags];
-     
-    if (self.contents == nil) {
-        /*
-        Tag *tag1 = [[Tag alloc] initWithLabel:@"Tag test 1"];
-        Tag *tag2 = [[Tag alloc] initWithLabel:@"Tag test 2"];
-        Content *content1 = [[Content alloc] initWithTitle:@"Content 1" description:@"This is the first content." tags:[[NSMutableArray alloc] initWithObjects:tag1, nil] links:[[NSMutableArray alloc] initWithObjects:nil]];
-        Content *content2 = [[Content alloc] initWithTitle:@"Content 2" description:@"This is the second content." tags:[[NSMutableArray alloc] initWithObjects:tag2, nil] links:[[NSMutableArray alloc] initWithObjects:content1, nil]];
+    NSMutableArray *allContents;
     
-        self.contents = [[NSMutableArray alloc] initWithObjects:content1, content2, nil];
-        */
+    if (self.content == nil) {
+        self.allTags = [ApiManager getTags];
+        allContents = [ApiManager getContents];
         
-        self.contents = [ApiManager getContents];
-        for (Content *content in self.contents) {
-            [ApiManager getContentLinks:content contents:self.contents];
-            [ApiManager getContentTags:content tags:self.allTags];
+        for (Content *content in allContents) {
+            [ApiManager getContentLinks:content contents:allContents];
+            content.tags = [ApiManager getContentTags:content];
         }
+    } else {
+        self.allTags = [ApiManager getTags]; // TO CHANGE
+        allContents = self.content.links;
     }
-  
-    /*
-    // **
-    // Making an array of every tag
-    // **
-    
-    self.allTags = [[NSMutableArray alloc] init];
-    
-    for (Content *c in self.contents) {
-        for (Tag *contentTag in c.tags) {
-            BOOL tagAlreadyExists = NO;
-            
-            for (Tag *t in self.allTags) {
-                if (contentTag.label == t.label) {
-                    tagAlreadyExists = YES;
-                    break ;
-                }
-            }
-            
-            if (!tagAlreadyExists) {
-                [self.allTags addObject:contentTag];
-                break ;
-            }
-        }
-    }
-    */
-    
 
+    [self updateTagListLabel];
+    [self manageContentsToShowWithContents:allContents];
     
-    // **
-    // Making an array of displayed contents based on filtered tags
-    // **
+    [self.contentTableView reloadData];
+}
+
+
+
+
+
+/**
+ * When pushing the tags button.
+ */
+- (IBAction)buttonTagPush:(id)sender
+{
+    AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
+    [nav pushViewController:self.tagListView animated:YES];
+     
+    [self.tagListView loadDataWithTags:self.allTags selectedTags:self.filteredTags];
+}
+
+
+
+
+
+/*
+ * Updates the label based on filtered tags
+ */
+- (void)updateTagListLabel
+{
+    if ([self.filteredTags count] > 0) {
+        self.tagListLabel.text = @"Allowed tags: ";
+        for (Tag *t in self.filteredTags) {
+            self.tagListLabel.text = [self.tagListLabel.text stringByAppendingFormat:@"%@", t.label];
+            if (t != [self.filteredTags lastObject])
+                self.tagListLabel.text = [self.tagListLabel.text stringByAppendingString:@", "];
+        }
+    } else {
+        self.tagListLabel.text = @"All tags";
+    }
+}
+
+/*
+ * Decides which contents to actually display based on filtered tags
+ */
+- (void)manageContentsToShowWithContents:(NSMutableArray *)contents
+{
     self.contentsToShow = [[NSMutableArray alloc] init];
     
     if ([self.filteredTags count] > 0) {
-        for (Content *ctt in self.contents) {
+        for (Content *ctt in contents) {
             for (Tag *t in self.filteredTags) {
-                if ([ctt hasTag:t.label]) {
+                if ([ctt hasTag:t]) {
                     [self.contentsToShow addObject:ctt];
                     break ;
                 }
             }
         }
     } else {
-        for (Content *ctt in self.contents)
+        for (Content *ctt in contents)
             [self.contentsToShow addObject:ctt];
     }
-
-    if ([self.filteredTags count] > 0) {
-        self.tagList.text = @"Allowed tags: ";
-        for (Tag *t in self.filteredTags) {
-            self.tagList.text = [self.tagList.text stringByAppendingFormat:@"%@", t.label];
-            if (t != [self.filteredTags lastObject])
-                self.tagList.text = [self.tagList.text stringByAppendingString:@", "];
-        }
-    } else {
-        self.tagList.text = @"All tags";
-    }
-    
-    [self.contentTableView reloadData];
-}
-
-- (IBAction)buttonTagPush:(id)sender
-{
-    AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
-    [nav pushViewController:self.tagListView animated:YES];
-    
-    self.tagListView.title = @"Tags";
-    self.tagListView.contentListView = self;
-    self.tagListView.tags = self.allTags;
 }
 
 @end
