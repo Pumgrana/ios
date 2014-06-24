@@ -24,10 +24,15 @@
     return self;
 }
 
+
+
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.title = @"Tags";
 }
 
 - (void)didReceiveMemoryWarning
@@ -35,6 +40,10 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -63,6 +72,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 }
+
+
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {

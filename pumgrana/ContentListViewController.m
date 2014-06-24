@@ -11,14 +11,13 @@
 #import "Tag.h"
 #import "TagListViewController.h"
 #import "ApiManager.h"
+#import "PartialContentProtocol.h"
 
 @interface ContentListViewController ()
 
 @end
 
 @implementation ContentListViewController
-@synthesize contentTableView;
-@synthesize filteredTags;
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -36,20 +35,20 @@
     return self;
 }
 
+
+
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    // Lower views creation
-    if (self.contentView == nil) {
-        ContentViewController *viewController = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:[NSBundle mainBundle]];
-        self.contentView = viewController;
-    }
-    if (self.tagListView == nil) {
-        TagListViewController *viewController = [[TagListViewController alloc] initWithNibName:@"TagListViewController" bundle:[NSBundle mainBundle]];
-        self.tagListView = viewController;
-    }
+    if (self.contentView == nil)
+        self.contentView = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:[NSBundle mainBundle]];
+    
+    if (self.tagListView == nil)
+        self.tagListView = [[TagListViewController alloc] initWithNibName:@"TagListViewController" bundle:[NSBundle mainBundle]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -57,6 +56,10 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -77,8 +80,9 @@
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     
-    Content *content = [self.contentsToShow objectAtIndex:indexPath.row];
-    cell.textLabel.text = content.title;
+    id<PartialContentProtocol> content = [self.contentsToShow objectAtIndex:indexPath.row];
+    cell.textLabel.text = [content getContentTitle];
+    
     return cell;
 }
 
@@ -88,11 +92,8 @@
     UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
     [nav pushViewController:self.contentView animated:YES];
 
-    Content *content = [self.contentsToShow objectAtIndex:indexPath.row];
-
-    self.contentView.title = content.title;
-    self.contentView.content = content;
-    self.contentView.contents = self.allContents; // TO CHANGE SOON !!!
+    id <PartialContentProtocol> content = [self.contentsToShow objectAtIndex:indexPath.row];
+    [self.contentView loadContentWithId:[content getContentId]];
 }
 
 
@@ -103,24 +104,19 @@
 {
     [super viewWillAppear:animated];
     
-    NSMutableArray *allContents;
-    
     if (self.content == nil) {
         // Case 1: First view displaying all contents
         
+        self.contentsToShow = [ApiManager getContentsFilteredByTags:self.filteredTags];
         self.allTags = [ApiManager getTags];
-        allContents = [ApiManager getContents];
     } else {
         // Case 2: Displaying a content's links
         
+        self.contentsToShow = [ApiManager getLinksFilteredByTags:self.filteredTags content:self.content];
         self.allTags = [ApiManager getTagsFromContentLinks:self.content];
-        allContents = self.content.links;
     }
-
-    self.allContents = allContents; // TO CHANGE SOON !!!
     
     [self updateTagListLabel];
-    [self manageContentsToShow];
     
     [self.contentTableView reloadData];
 }
@@ -159,18 +155,6 @@
         }
     } else {
         self.tagListLabel.text = @"All tags";
-    }
-}
-
-/*
- * Decides which contents to actually display based on filtered tags
- */
-- (void)manageContentsToShow
-{    
-    if (self.content == nil) {
-        self.contentsToShow = [ApiManager getContentsFilteredByTags:self.filteredTags];
-    } else {
-        self.contentsToShow = [ApiManager getLinksFilteredByTags:self.filteredTags content:self.content contents:self.allContents];
     }
 }
 

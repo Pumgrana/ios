@@ -19,12 +19,13 @@
 + (id)getJSONResponse:(NSString *)urlParams;
 
 + (NSMutableArray *)getContents;
++ (Content *)getContentWithId:(NSString *)id;
 + (NSMutableArray *)getTags;
-+ (Content *)getContentLinks:(Content *)content contents:(NSMutableArray *)contents;
++ (NSMutableArray *)getContentLinks:(Content *)content;
 + (NSMutableArray *)getContentTags:(Content *)content;
 + (NSMutableArray *)getTagsFromContentLinks:(Content *)content;
 + (NSMutableArray *)getContentsFilteredByTags:(NSMutableArray *)tags;
-+ (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content contents:(NSMutableArray *)contents;
++ (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content;
 
 + (void)updateContent:(Content *)content;
 + (void)insertContent:(Content *)content;

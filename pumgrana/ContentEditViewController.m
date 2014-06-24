@@ -27,6 +27,10 @@
     return self;
 }
 
+
+
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -43,6 +47,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -51,6 +59,10 @@
     self.titleField.text = self.currentTitle;
     self.contentField.text = self.currentDescription;
 }
+
+
+
+
 
 - (IBAction)buttonSendPush:(id)sender;
 {

@@ -9,6 +9,7 @@
 #import "ApiManager.h"
 #import "Content.h"
 #import "Tag.h"
+#import "Link.h"
 
 @implementation ApiManager
 
@@ -72,6 +73,29 @@
 }
 
 /**
+ * Gets a full detailed content via the API
+ * @param id The id of the content we want
+ * @return The content we want
+ */
++ (Content *)getContentWithId:(NSString *)id
+{
+    NSString        *url        = [[NSString alloc] initWithFormat:@"/content/detail/%@", id];
+    NSDictionary    *response   = [ApiManager getJSONResponse:url];
+    Content         *content    = [[Content alloc] init];
+    
+    content.id = id;
+    
+    if (response) {
+        NSArray *contentArray = [response objectForKey:@"contents"];
+        
+        if (![contentArray isEqual:[NSNull null]] && [contentArray count] > 0)
+            content = [[Content alloc] initFromJson:[contentArray objectAtIndex:0]];
+    }
+    
+    return content;
+}
+
+/**
  * Makes an API call to get all the tags
  * @return An array of Tag objects
  */
@@ -93,36 +117,28 @@
 }
 
 /**
- * Makes an API call to fill the links of a Content object
+ * Gets the links of a content via the API
  * @param content The content we want the links
- * @param contents The array containing all the contents
- * @return The original Content object
+ * @return The list of links
  */
-+ (Content *)getContentLinks:(Content *)content contents:(NSMutableArray *)contents
++ (NSMutableArray *)getContentLinks:(Content *)content
 {
     NSString        *url        = @"/link/list_from_content/";
     NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingFormat:@"%@", content.id]];
+    NSMutableArray  *links      = [[NSMutableArray alloc] init];
     
     if (response) {
         NSArray *linkArray  = [response objectForKey:@"links"];
         
         if (![linkArray isEqual:[NSNull null]]) {
-            content.links = [[NSMutableArray alloc] init];
-            
             for (NSDictionary *link in linkArray) {
-                NSString *id = [link objectForKey:@"content_id"];
-        
-                for (Content *c in contents) {
-                    if ([c.id isEqualToString:id]) {
-                        [content.links addObject:c];
-                        break ;
-                    }
-                }
+                Link *newLink = [[Link alloc] initFromJson:link];
+                [links addObject:newLink];
             }
         }
     }
     
-    return (content);
+    return links;
 }
 
 /**
@@ -210,7 +226,7 @@
  * @param contents All the contents /!\ TO CHANGE SOON /!\
  * @return The list of filtered links
  */
-+ (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content contents:(NSMutableArray *)contents
++ (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content
 {
     NSMutableString *paramTags  = [[NSMutableString alloc] init];
     for (Tag *tag in tags) {
@@ -226,14 +242,8 @@
         
         if (![linkArray isEqual:[NSNull null]]) {
             for (NSDictionary *link in linkArray) {
-                NSString *id = [link objectForKey:@"content_id"];
-                
-                for (Content *c in contents) {
-                    if ([c.id isEqualToString:id]) {
-                        [links addObject:c];
-                        break ;
-                    }
-                }
+                Link *newLink = [[Link alloc] initFromJson:link];
+                [links addObject:newLink];
             }
         }
     }

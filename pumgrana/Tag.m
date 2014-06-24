@@ -11,17 +11,8 @@
 @implementation Tag
 
 /**
- * Default raw constructor. Not used.
- */
-- (id)initWithLabel:(NSString *)l
-{
-    self.id = @"1";
-    self.subject = l;
-    return self;
-}
-
-/**
- * Constructor based on a tag serialized in JSON coming from the response of the API.
+ * Constructor based on a tag serialized in JSON coming from the response of the API
+ * @param json A JSON tag deserialized as a dictionary
  */
 - (id)initFromJson:(NSDictionary *)json
 {
@@ -30,6 +21,11 @@
     return self;
 }
 
+/**
+ * Comparing to another tag
+ * @param tag The tag to compare to
+ * @return YES if the two tags are equal
+ */
 - (BOOL)isEqualToTag:(Tag *)tag
 {
     return [self.id isEqualToString:tag.id];

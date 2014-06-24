@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		821519061959C471009BD7BC /* Link.m in Sources */ = {isa = PBXBuildFile; fileRef = 821519051959C471009BD7BC /* Link.m */; };
 		826B3300182DB78F00FB8FC0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 826B32FF182DB78F00FB8FC0 /* Foundation.framework */; };
 		826B3302182DB78F00FB8FC0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 826B3301182DB78F00FB8FC0 /* CoreGraphics.framework */; };
 		826B3304182DB78F00FB8FC0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 826B3303182DB78F00FB8FC0 /* UIKit.framework */; };
@@ -51,6 +52,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		821519041959C471009BD7BC /* Link.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Link.h; sourceTree = "<group>"; };
+		821519051959C471009BD7BC /* Link.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Link.m; sourceTree = "<group>"; };
+		821519071959CB8A009BD7BC /* PartialContentProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartialContentProtocol.h; sourceTree = "<group>"; };
 		826B32FC182DB78F00FB8FC0 /* pumgrana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pumgrana.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		826B32FF182DB78F00FB8FC0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		826B3301182DB78F00FB8FC0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -121,6 +125,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		821519081959E58C009BD7BC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				826B333618330E9400FB8FC0 /* ContentListViewController.h */,
+				826B333718330E9400FB8FC0 /* ContentListViewController.m */,
+				826B335D183FCB8E00FB8FC0 /* TagListViewController.xib */,
+				826B335A183FCB3100FB8FC0 /* TagListViewController.h */,
+				826B335B183FCB3100FB8FC0 /* TagListViewController.m */,
+				826B334A18340D9300FB8FC0 /* ContentViewController.xib */,
+				826B334718340BB900FB8FC0 /* ContentViewController.h */,
+				826B334818340BB900FB8FC0 /* ContentViewController.m */,
+				82BE0D5B18F2FF8700D2B810 /* ContentEditViewController.xib */,
+				82BE0D5918F2FF8600D2B810 /* ContentEditViewController.h */,
+				82BE0D5A18F2FF8600D2B810 /* ContentEditViewController.m */,
+				826B33551839982100FB8FC0 /* ContentTagListViewController.xib */,
+				826B3352183997CD00FB8FC0 /* ContentTagListViewController.h */,
+				826B3353183997CD00FB8FC0 /* ContentTagListViewController.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		826B32F3182DB78F00FB8FC0 = {
 			isa = PBXGroup;
 			children = (
@@ -160,24 +185,14 @@
 				826B336B1840119800FB8FC0 /* MainViewController.h */,
 				826B336C1840119800FB8FC0 /* MainViewController.m */,
 				826B332E182DC53E00FB8FC0 /* Main.storyboard */,
-				826B333618330E9400FB8FC0 /* ContentListViewController.h */,
-				826B333718330E9400FB8FC0 /* ContentListViewController.m */,
-				826B335D183FCB8E00FB8FC0 /* TagListViewController.xib */,
-				826B335A183FCB3100FB8FC0 /* TagListViewController.h */,
-				826B335B183FCB3100FB8FC0 /* TagListViewController.m */,
-				826B334A18340D9300FB8FC0 /* ContentViewController.xib */,
-				826B334718340BB900FB8FC0 /* ContentViewController.h */,
-				826B334818340BB900FB8FC0 /* ContentViewController.m */,
-				82BE0D5B18F2FF8700D2B810 /* ContentEditViewController.xib */,
-				82BE0D5918F2FF8600D2B810 /* ContentEditViewController.h */,
-				82BE0D5A18F2FF8600D2B810 /* ContentEditViewController.m */,
-				826B33551839982100FB8FC0 /* ContentTagListViewController.xib */,
-				826B3352183997CD00FB8FC0 /* ContentTagListViewController.h */,
-				826B3353183997CD00FB8FC0 /* ContentTagListViewController.m */,
+				821519081959E58C009BD7BC /* Views */,
+				821519071959CB8A009BD7BC /* PartialContentProtocol.h */,
 				826B334C18398FF700FB8FC0 /* Content.h */,
 				826B334D18398FF700FB8FC0 /* Content.m */,
 				826B334F183993EC00FB8FC0 /* Tag.h */,
 				826B3350183993EC00FB8FC0 /* Tag.m */,
+				821519041959C471009BD7BC /* Link.h */,
+				821519051959C471009BD7BC /* Link.m */,
 				82BA059518A8188500E0D1B2 /* ApiManager.h */,
 				82BA059618A8188500E0D1B2 /* ApiManager.m */,
 				826B3311182DB78F00FB8FC0 /* Images.xcassets */,
@@ -345,6 +360,7 @@
 				826B3354183997CD00FB8FC0 /* ContentTagListViewController.m in Sources */,
 				82BE0D5C18F2FF8700D2B810 /* ContentEditViewController.m in Sources */,
 				826B336D1840119800FB8FC0 /* MainViewController.m in Sources */,
+				821519061959C471009BD7BC /* Link.m in Sources */,
 				826B333818330E9400FB8FC0 /* ContentListViewController.m in Sources */,
 				826B3310182DB78F00FB8FC0 /* AppDelegate.m in Sources */,
 				826B334E18398FF700FB8FC0 /* Content.m in Sources */,

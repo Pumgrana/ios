@@ -13,7 +13,6 @@
 @property (nonatomic, strong) NSString *id;
 @property (nonatomic, strong) NSString *subject;
 
-- (id)initWithLabel:(NSString *)l;
 - (id)initFromJson:(NSDictionary *)json;
 
 - (BOOL)isEqualToTag:(Tag *)tag;

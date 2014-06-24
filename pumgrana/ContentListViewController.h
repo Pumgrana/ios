@@ -35,11 +35,6 @@
 @property (nonatomic, strong) Content *content;
 
 /**
- * All contents /!\ TO CHANGE SOON /!\
- */
-@property (nonatomic, strong) NSMutableArray *allContents;
-
-/**
  * The contents to display.
  */
 @property (nonatomic, strong) NSMutableArray *contentsToShow;
@@ -78,6 +73,5 @@
 
 
 - (void)updateTagListLabel;
-- (void)manageContentsToShow;
 
 @end

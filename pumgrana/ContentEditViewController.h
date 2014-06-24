@@ -14,9 +14,6 @@
 
 @interface ContentEditViewController : UIViewController
 
-@property (nonatomic, strong) NSString *currentTitle;
-@property (nonatomic, strong) NSString *currentDescription;
-
 /**
  * Send button in navigation bar
  */
@@ -32,10 +29,18 @@
  */
 @property (weak, nonatomic) IBOutlet UITextView *contentField;
 
+
+
+
+
 /**
  * Tag list selection view
  */
 @property (nonatomic, strong) TagListViewController *tagListView;
+
+
+
+
 
 /**
  * All the tags.
@@ -51,6 +56,20 @@
  * The content to edit.
  */
 @property (nonatomic, strong) Content *content;
+
+/**
+ * Title to be displayed
+ */
+@property (nonatomic, strong) NSString *currentTitle;
+
+/**
+ * Description to be displayed
+ */
+@property (nonatomic, strong) NSString *currentDescription;
+
+
+
+
 
 /**
  * When pushing the send button.

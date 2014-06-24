@@ -8,22 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "Tag.h"
+#import "PartialContentProtocol.h"
 
-@interface Content : NSObject
+@interface Content : NSObject <PartialContentProtocol>
 
 @property (nonatomic, strong) NSString *id;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *summary;
 @property (nonatomic, strong) NSString *text;
-
-/**
- * Array containing Tag objects.
- */
 @property (nonatomic, strong) NSMutableArray *tags;
-
-/**
- * Array containing Content objects.
- */
 @property (nonatomic, strong) NSMutableArray *links;
 
 

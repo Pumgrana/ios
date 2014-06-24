@@ -26,6 +26,10 @@
     return self;
 }
 
+
+
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -39,10 +43,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [self.tagListTable reloadData];
-}
+
+
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -99,6 +102,15 @@
         [self.selectedTags addObject:tag];
         cell.imageView.image = [UIImage imageNamed:@"tick-and-border.png"];
     }
+}
+
+
+
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.tagListTable reloadData];
 }
 
 

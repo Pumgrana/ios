@@ -39,14 +39,14 @@
 @property (nonatomic, strong) ContentEditViewController *contentEditView;
 
 /**
- * The view to be used to display the links of the content.
- */
-@property (nonatomic, strong) ContentListViewController *contentListView;
-
-/**
  * The view to be used to display the tags of the content.
  */
 @property (nonatomic, strong) ContentTagListViewController *contentTagListView;
+
+/**
+ * The view to be used to display the links of the content.
+ */
+@property (nonatomic, strong) ContentListViewController *contentListView;
 
 
 
@@ -57,10 +57,6 @@
  */
 @property (nonatomic, strong) Content *content;
 
-/**
- * All contents /!\ TO CHANGE SOON /!\
- */
-@property (nonatomic, strong) NSMutableArray *contents;
 
 
 
@@ -79,5 +75,11 @@
  * When pushing the links button.
  */
 - (IBAction)buttonLinksPush:(id)sender;
+
+
+
+
+
+- (void)loadContentWithId:(NSString *)id;
 
 @end
