@@ -12,12 +12,22 @@
 
 @class ContentListViewController, ContentEditViewController;
 
-@interface ContentViewController : UIViewController
+@interface ContentViewController : UIViewController <UIActionSheetDelegate, UIAlertViewDelegate>
 
 /**
- * Edit button in navigation bar
+ * "More" button in navigation bar
  */
-@property (nonatomic, retain) UIBarButtonItem *editButton;
+@property (nonatomic, retain) UIBarButtonItem *moreButton;
+
+/**
+ * "More" action sheet (popup with different actions)
+ */
+@property (nonatomic, strong) UIActionSheet *moreActionSheet;
+
+/**
+ * Popup displayed on delete action
+ */
+@property (nonatomic, strong) UIAlertView *deleteAlert;
 
 /**
  * Label containing the title of the content.
@@ -62,9 +72,9 @@
 
 
 /**
- * When pushing the edit button.
+ * When pushing the more button.
  */
-- (IBAction)buttonEditPush:(id)sender;
+- (IBAction)buttonMorePush:(id)sender;
 
 /**
  * When pushing the tags button.

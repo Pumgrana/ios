@@ -251,6 +251,10 @@
     return links;
 }
 
+
+
+
+
 /**
  * Updates a content
  * @param content The content to update
@@ -283,7 +287,7 @@
     NSURLResponse *response;
     NSError *error;
     
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 }
 
 /**
@@ -308,7 +312,40 @@
     NSURLResponse *response;
     NSError *error;
     
-    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+}
+
+/**
+ * Deletes the given contents
+ * @param contents The contents to delete
+ */
++ (void)deleteContents:(NSMutableArray *)contents
+{
+    NSMutableString *params = [[NSMutableString alloc] initWithFormat:@"{\"contents_id\":["];
+    NSInteger       index   = 0;
+    for (Content *content in contents) {
+        if (index > 0)
+            [params appendString:@";"];
+        [params appendFormat:@"\"%@\"", content.id];
+        ++index;
+    }
+    [params appendString:@"]}"];
+    
+    NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    NSString    *url        = [[NSString alloc] initWithFormat:@"%@/content/delete", API_URL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLResponse   *response;
+    NSError         *error;
+    
+    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 }
 
 @end

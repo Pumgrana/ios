@@ -29,5 +29,6 @@
 
 + (void)updateContent:(Content *)content;
 + (void)insertContent:(Content *)content;
++ (void)deleteContents:(NSMutableArray *)contents;
 
 @end

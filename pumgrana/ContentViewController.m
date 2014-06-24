@@ -28,7 +28,13 @@
         self.contentTagListView = nil;
         self.contentListView = nil;
         
-        self.editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(buttonEditPush:)];
+        self.moreButton = [[UIBarButtonItem alloc] initWithTitle:@"More" style:UIBarButtonItemStylePlain target:self action:@selector(buttonMorePush:)];
+        
+        self.moreActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit", @"Delete", nil];
+        self.moreActionSheet.tag = 1;
+        
+        self.deleteAlert = [[UIAlertView alloc] initWithTitle:nil message:@"" delegate:self cancelButtonTitle:nil otherButtonTitles: @"Yes", @"No", nil];
+        self.deleteAlert.tag = 1;
     }
     return self;
 }
@@ -54,7 +60,7 @@
     }
     
     if (self.navigationItem.rightBarButtonItem == nil)
-        self.navigationItem.rightBarButtonItem = self.editButton;
+        self.navigationItem.rightBarButtonItem = self.moreButton;
 }
 
 - (void)didReceiveMemoryWarning
@@ -78,18 +84,57 @@
 
 
 
-- (IBAction)buttonEditPush:(id)sender;
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
-    [nav pushViewController:self.contentEditView animated:YES];
-    
-    self.contentEditView.title = @"Edit";
-    self.contentEditView.content = self.content;
-    self.contentEditView.currentTitle = self.content.title;
-    self.contentEditView.currentDescription = self.content.text;
-    self.contentEditView.allTags = [ApiManager getTags];
-    self.contentEditView.filteredTags = [[NSMutableArray alloc] initWithArray:self.content.tags];
+    if (actionSheet.tag == 1) {
+        AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
+        
+        if (buttonIndex == 0) {
+            // Edit content
+            
+            [nav pushViewController:self.contentEditView animated:YES];
+            
+            self.contentEditView.title = @"Edit";
+            self.contentEditView.content = self.content;
+            self.contentEditView.currentTitle = self.content.title;
+            self.contentEditView.currentDescription = self.content.text;
+            self.contentEditView.allTags = [ApiManager getTags];
+            self.contentEditView.filteredTags = [[NSMutableArray alloc] initWithArray:self.content.tags];
+        } else if (buttonIndex == 1) {
+            // Delete content
+            
+            [self.deleteAlert setMessage:[[NSString alloc] initWithFormat:@"Are you sure you want to delete the content \"%@\" ?", self.content.title]];
+            [self.deleteAlert show];
+            
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 1) {
+        if (buttonIndex == 0) {
+            // Yes
+            
+            AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
+            
+            [nav popViewControllerAnimated:YES];
+            [ApiManager deleteContents:[[NSMutableArray alloc] initWithObjects:self.content, nil]];
+        } else if (buttonIndex == 1) {
+            // No
+        }
+    }
+}
+
+
+
+
+
+- (IBAction)buttonMorePush:(id)sender;
+{
+    [self.moreActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 - (IBAction)buttonTagsPush:(id)sender
