@@ -106,13 +106,14 @@
     if (response) {
         NSArray *linkArray  = [response objectForKey:@"links"];
         
-        if (linkArray != (id)[NSNull null]) {
+        if (![linkArray isEqual:[NSNull null]]) {
             content.links = [[NSMutableArray alloc] init];
+            
             for (NSDictionary *link in linkArray) {
-                NSNumber *id = [link objectForKey:@"content_id"];
+                NSString *id = [link objectForKey:@"content_id"];
         
                 for (Content *c in contents) {
-                    if ([c.id isEqual:id]) {
+                    if ([c.id isEqualToString:id]) {
                         [content.links addObject:c];
                         break ;
                     }
@@ -147,6 +148,103 @@
     return (tags);
 }
 
+/**
+ * Gets the list of tags corresponding to all the tags contained in the content links
+ * @param content The content we want the link tags from
+ * @return The list of tags related to the links
+ */
++ (NSMutableArray *)getTagsFromContentLinks:(Content *)content
+{
+    NSString        *url        = @"/tag/list_from_content_links/";
+    NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingString:content.id]];
+    NSMutableArray  *linkTags   = [[NSMutableArray alloc] init];
+    
+    if (response) {
+        NSArray *linkTagArray = [response objectForKey:@"tags"];
+        
+        if (![linkTagArray isEqual:[NSNull null]]) {
+            for (NSDictionary *tag in linkTagArray) {
+                Tag *newTag = [[Tag alloc] initFromJson:tag];
+                [linkTags addObject:newTag];
+            }
+        }
+    }
+    
+    return linkTags;
+}
+
+/**
+ * Get only contents containing one of the given tags
+ * @param tags The tags used to filter the contents
+ * @return The list of filtered contents
+ */
++ (NSMutableArray *)getContentsFilteredByTags:(NSMutableArray *)tags
+{
+    NSMutableString *paramTags  = [[NSMutableString alloc] init];
+    for (Tag *tag in tags) {
+        [paramTags appendFormat:@"%@/", tag.id];
+    }
+    
+    NSString        *url        = [[NSString alloc] initWithFormat:@"/content/list_content//%@", paramTags];
+    NSDictionary    *response   = [ApiManager getJSONResponse:url];
+    NSMutableArray  *contents   = [[NSMutableArray alloc] init];
+    
+    if (response) {
+        NSArray *contentArray = [response objectForKey:@"contents"];
+        
+        if (![contentArray isEqual:[NSNull null]]) {
+            for (NSDictionary *content in contentArray) {
+                Content *newContent = [[Content alloc] initFromJson:content];
+                [contents addObject:newContent];
+            }
+        }
+    }
+    
+    return contents;
+}
+
+/**
+ * Get only links of the content containing one of the given tags
+ * @param tags The tags used to filter the links
+ * @param content The content we want to filter the links from
+ * @param contents All the contents /!\ TO CHANGE SOON /!\
+ * @return The list of filtered links
+ */
++ (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content contents:(NSMutableArray *)contents
+{
+    NSMutableString *paramTags  = [[NSMutableString alloc] init];
+    for (Tag *tag in tags) {
+        [paramTags appendFormat:@"%@/", tag.id];
+    }
+    
+    NSString        *url        = [[NSString alloc] initWithFormat:@"/link/list_from_content_tags/%@/%@", content.id, paramTags];
+    NSDictionary    *response   = [ApiManager getJSONResponse:url];
+    NSMutableArray  *links      = [[NSMutableArray alloc] init];
+    
+    if (response) {
+        NSArray *linkArray = [response objectForKey:@"links"];
+        
+        if (![linkArray isEqual:[NSNull null]]) {
+            for (NSDictionary *link in linkArray) {
+                NSString *id = [link objectForKey:@"content_id"];
+                
+                for (Content *c in contents) {
+                    if ([c.id isEqualToString:id]) {
+                        [links addObject:c];
+                        break ;
+                    }
+                }
+            }
+        }
+    }
+    
+    return links;
+}
+
+/**
+ * Updates a content
+ * @param content The content to update
+ */
 + (void)updateContent:(Content *)content
 {
     NSMutableString *paramTags  = [[NSMutableString alloc] initWithString:@"["];
@@ -178,6 +276,10 @@
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 }
 
+/**
+ * Creates a new content
+ * @param content The content to create
+ */
 + (void)insertContent:(Content *)content
 {
     NSString    *params     = [[NSString alloc] initWithFormat:@"{\"title\":\"%@\", \"summary\":\"%@\", \"text\":\"%@\"}", content.title, content.text, content.text];

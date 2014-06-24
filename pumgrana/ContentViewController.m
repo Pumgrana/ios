@@ -53,6 +53,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -60,7 +64,14 @@
     self.labelTitle.text = self.content.title;
     self.textViewDescription.text = self.content.text;
     self.navigationItem.rightBarButtonItem = self.editButton;
+    
+    [ApiManager getContentLinks:self.content contents:self.contents]; // TO CHANGE SOON !!!
+    self.content.tags = [ApiManager getContentTags:self.content];
 }
+
+
+
+
 
 - (IBAction)buttonEditPush:(id)sender;
 {

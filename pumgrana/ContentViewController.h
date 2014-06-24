@@ -29,6 +29,10 @@
  */
 @property (weak, nonatomic) IBOutlet UITextView *textViewDescription;
 
+
+
+
+
 /**
  * The view to be used to edit the content.
  */
@@ -44,10 +48,22 @@
  */
 @property (nonatomic, strong) ContentTagListViewController *contentTagListView;
 
+
+
+
+
 /**
  * The content to display.
  */
 @property (nonatomic, strong) Content *content;
+
+/**
+ * All contents /!\ TO CHANGE SOON /!\
+ */
+@property (nonatomic, strong) NSMutableArray *contents;
+
+
+
 
 /**
  * When pushing the edit button.

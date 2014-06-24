@@ -16,7 +16,7 @@
 - (id)initWithLabel:(NSString *)l
 {
     self.id = @"1";
-    self.label = l;
+    self.subject = l;
     return self;
 }
 
@@ -26,7 +26,7 @@
 - (id)initFromJson:(NSDictionary *)json
 {
     self.id = [json objectForKey:@"_id"];
-    self.label = [json objectForKey:@"subject"];
+    self.subject = [json objectForKey:@"subject"];
     return self;
 }
 

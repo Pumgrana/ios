@@ -64,7 +64,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     
     Tag *tag = [self.tags objectAtIndex:indexPath.row];
-    cell.textLabel.text = tag.label;
+    cell.textLabel.text = tag.subject;
     
     BOOL alreadyExists = NO;
     for (Tag *t in self.selectedTags) {

@@ -92,6 +92,7 @@
 
     self.contentView.title = content.title;
     self.contentView.content = content;
+    self.contentView.contents = self.allContents; // TO CHANGE SOON !!!
 }
 
 
@@ -105,20 +106,21 @@
     NSMutableArray *allContents;
     
     if (self.content == nil) {
+        // Case 1: First view displaying all contents
+        
         self.allTags = [ApiManager getTags];
         allContents = [ApiManager getContents];
-        
-        for (Content *content in allContents) {
-            [ApiManager getContentLinks:content contents:allContents];
-            content.tags = [ApiManager getContentTags:content];
-        }
     } else {
-        self.allTags = [ApiManager getTags]; // TO CHANGE
+        // Case 2: Displaying a content's links
+        
+        self.allTags = [ApiManager getTagsFromContentLinks:self.content];
         allContents = self.content.links;
     }
 
+    self.allContents = allContents; // TO CHANGE SOON !!!
+    
     [self updateTagListLabel];
-    [self manageContentsToShowWithContents:allContents];
+    [self manageContentsToShow];
     
     [self.contentTableView reloadData];
 }
@@ -151,7 +153,7 @@
     if ([self.filteredTags count] > 0) {
         self.tagListLabel.text = @"Allowed tags: ";
         for (Tag *t in self.filteredTags) {
-            self.tagListLabel.text = [self.tagListLabel.text stringByAppendingFormat:@"%@", t.label];
+            self.tagListLabel.text = [self.tagListLabel.text stringByAppendingFormat:@"%@", t.subject];
             if (t != [self.filteredTags lastObject])
                 self.tagListLabel.text = [self.tagListLabel.text stringByAppendingString:@", "];
         }
@@ -163,22 +165,12 @@
 /*
  * Decides which contents to actually display based on filtered tags
  */
-- (void)manageContentsToShowWithContents:(NSMutableArray *)contents
-{
-    self.contentsToShow = [[NSMutableArray alloc] init];
-    
-    if ([self.filteredTags count] > 0) {
-        for (Content *ctt in contents) {
-            for (Tag *t in self.filteredTags) {
-                if ([ctt hasTag:t]) {
-                    [self.contentsToShow addObject:ctt];
-                    break ;
-                }
-            }
-        }
+- (void)manageContentsToShow
+{    
+    if (self.content == nil) {
+        self.contentsToShow = [ApiManager getContentsFilteredByTags:self.filteredTags];
     } else {
-        for (Content *ctt in contents)
-            [self.contentsToShow addObject:ctt];
+        self.contentsToShow = [ApiManager getLinksFilteredByTags:self.filteredTags content:self.content contents:self.allContents];
     }
 }
 

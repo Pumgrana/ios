@@ -56,7 +56,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     
     Tag *tag = [self.content.tags objectAtIndex:indexPath.row];
-    cell.textLabel.text = tag.label;
+    cell.textLabel.text = tag.subject;
     return cell;
 }
 

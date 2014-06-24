@@ -11,7 +11,7 @@
 
 //#define API_URL (@"http://163.5.84.222/api")
 //#define API_URL (@"http://pichot.fr:1337")
-#define API_URL (@"http://192.168.84.141:8081/api")
+#define API_URL (@"http://192.168.84.142:8081/api")
 
 @interface ApiManager : NSObject
 
@@ -22,6 +22,10 @@
 + (NSMutableArray *)getTags;
 + (Content *)getContentLinks:(Content *)content contents:(NSMutableArray *)contents;
 + (NSMutableArray *)getContentTags:(Content *)content;
++ (NSMutableArray *)getTagsFromContentLinks:(Content *)content;
++ (NSMutableArray *)getContentsFilteredByTags:(NSMutableArray *)tags;
++ (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content contents:(NSMutableArray *)contents;
+
 + (void)updateContent:(Content *)content;
 + (void)insertContent:(Content *)content;
 
