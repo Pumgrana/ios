@@ -16,6 +16,11 @@
 @interface ContentListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 /**
+ * Button to add a content in navigation bar
+ */
+@property (nonatomic, retain) UIBarButtonItem *addContentButton;
+
+/**
  * Label with the list of the filtered tags.
  */
 @property (weak, nonatomic) IBOutlet UILabel *tagListLabel;
@@ -67,7 +72,9 @@
 
 
 
+- (IBAction)buttonAddContentPush:(id)sender;
 - (IBAction)buttonTagPush:(id)sender;
+
 
 
 

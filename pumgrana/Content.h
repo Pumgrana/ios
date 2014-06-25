@@ -24,6 +24,8 @@
 
 
 - (id)initFromJson:(NSDictionary *)json;
+- (id)initFromContent:(Content *)content;
+
 - (BOOL)hasTag: (Tag *)tag;
 
 @end

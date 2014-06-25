@@ -12,12 +12,17 @@
 
 @class TagListViewController;
 
-@interface ContentEditViewController : UIViewController
+@interface ContentEditViewController : UIViewController <UIAlertViewDelegate>
+
+/**
+ * Popup displayed when editing is sucessful
+ */
+@property (nonatomic, strong) UIAlertView *editAlert;
 
 /**
  * Send button in navigation bar
  */
-@property (nonatomic, retain) UIBarButtonItem *sendButton;
+@property (nonatomic, retain) UIBarButtonItem *doneButton;
 
 /**
  * Represents the text field for the title of the content
@@ -25,9 +30,14 @@
 @property (weak, nonatomic) IBOutlet UITextField *titleField;
 
 /**
- * Represents the text field for the description of the content
+ * Represents the text field for the summary of the content
  */
-@property (weak, nonatomic) IBOutlet UITextView *contentField;
+@property (weak, nonatomic) IBOutlet UITextField *summaryField;
+
+/**
+ * Represents the text field for the text of the content
+ */
+@property (weak, nonatomic) IBOutlet UITextView *textField;
 
 
 
@@ -50,35 +60,39 @@
 /**
  * The tags filtered by the user.
  */
-@property (nonatomic, strong) NSMutableArray *filteredTags;
+//@property (nonatomic, strong) NSMutableArray *filteredTags;
 
 /**
  * The content to edit.
  */
-@property (nonatomic, strong) Content *content;
+//@property (nonatomic, strong) Content *content;
+
+/**
+ * Temporary content to be sent to the server
+ */
+@property (nonatomic, strong) Content *temporaryContent;
 
 /**
  * Title to be displayed
  */
-@property (nonatomic, strong) NSString *currentTitle;
+//@property (nonatomic, strong) NSString *currentTitle;
 
 /**
  * Description to be displayed
  */
-@property (nonatomic, strong) NSString *currentDescription;
+//@property (nonatomic, strong) NSString *currentDescription;
 
 
 
 
 
-/**
- * When pushing the send button.
- */
-- (IBAction)buttonSendPush:(id)sender;
-
-/**
- * When the tags button is pushed.
- */
+- (IBAction)buttonDonePush:(id)sender;
 - (IBAction)buttonTagsPush:(id)sender;
+
+
+
+
+
+- (void)loadContent:(Content *)content;
 
 @end

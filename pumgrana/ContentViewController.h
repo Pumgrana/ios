@@ -32,12 +32,17 @@
 /**
  * Label containing the title of the content.
  */
-@property (nonatomic, retain) IBOutlet UILabel *labelTitle;
+@property (nonatomic, retain) IBOutlet UILabel *titleLabel;
+
+/**
+ * Label containing the summary of the content
+ */
+@property (weak, nonatomic) IBOutlet UILabel *summaryLabel;
 
 /**
  * Text area containing the description of the content.
  */
-@property (weak, nonatomic) IBOutlet UITextView *textViewDescription;
+@property (weak, nonatomic) IBOutlet UITextView *textTextView;
 
 
 

@@ -271,7 +271,7 @@
     }
     [paramTags appendString:@"]"];
     
-    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"content_id\":\"%@\",\"title\":\"%@\",\"text\":\"%@\",\"tags_id\":%@}", content.id, content.title, content.text, paramTags];
+    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"content_id\":\"%@\",\"title\":\"%@\", \"summary\":\"%@\",\"text\":\"%@\",\"tags_id\":%@}", content.id, content.title, content.summary, content.text, paramTags];
     NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
     NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     NSString    *baseUrl    = API_URL;

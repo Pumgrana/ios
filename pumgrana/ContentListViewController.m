@@ -30,6 +30,8 @@
         
         self.contentView = nil;
         self.tagListView = nil;
+        
+        self.addContentButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(buttonAddContentPush:)];
     }
     
     return self;
@@ -107,6 +109,8 @@
     if (self.content == nil) {
         // Case 1: First view displaying all contents
         
+        self.navigationItem.rightBarButtonItem = self.addContentButton;
+        
         self.contentsToShow = [ApiManager getContentsFilteredByTags:self.filteredTags];
         self.allTags = [ApiManager getTags];
     } else {
@@ -124,6 +128,14 @@
 
 
 
+
+/**
+ * When pushing the add content button
+ */
+- (IBAction)buttonAddContentPush:(id)sender
+{
+    
+}
 
 /**
  * When pushing the tags button.

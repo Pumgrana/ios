@@ -28,7 +28,8 @@
         self.contentTagListView = nil;
         self.contentListView = nil;
         
-        self.moreButton = [[UIBarButtonItem alloc] initWithTitle:@"More" style:UIBarButtonItemStylePlain target:self action:@selector(buttonMorePush:)];
+        self.moreButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(buttonMorePush:)];
+        
         
         self.moreActionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Edit", @"Delete", nil];
         self.moreActionSheet.tag = 1;
@@ -61,6 +62,8 @@
     
     if (self.navigationItem.rightBarButtonItem == nil)
         self.navigationItem.rightBarButtonItem = self.moreButton;
+    
+    self.textTextView.editable = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,6 +87,9 @@
 
 
 
+/**
+ * When pushing a button on the action sheet
+ */
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (actionSheet.tag == 1) {
@@ -94,13 +100,7 @@
             // Edit content
             
             [nav pushViewController:self.contentEditView animated:YES];
-            
-            self.contentEditView.title = @"Edit";
-            self.contentEditView.content = self.content;
-            self.contentEditView.currentTitle = self.content.title;
-            self.contentEditView.currentDescription = self.content.text;
-            self.contentEditView.allTags = [ApiManager getTags];
-            self.contentEditView.filteredTags = [[NSMutableArray alloc] initWithArray:self.content.tags];
+            [self.contentEditView loadContent:self.content];
         } else if (buttonIndex == 1) {
             // Delete content
             
@@ -111,6 +111,9 @@
     }
 }
 
+/**
+ * When pushing a button on the alert popup
+ */
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.tag == 1) {
@@ -170,8 +173,9 @@
     self.content.links = [ApiManager getContentLinks:self.content];
     
     self.title = self.content.title;
-    self.labelTitle.text = self.content.title;
-    self.textViewDescription.text = self.content.text;
+    self.titleLabel.text = self.content.title;
+    self.summaryLabel.text = self.content.summary;
+    self.textTextView.text = self.content.text;
 }
 
 @end
