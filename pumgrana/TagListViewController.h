@@ -37,6 +37,12 @@
 
 
 
+- (void)rowSwitchChanged:(id)sender;
+
+
+
+
+
 - (void)loadDataWithTags:(NSMutableArray *)tags selectedTags:(NSMutableArray *)selectedTags;
 
 @end

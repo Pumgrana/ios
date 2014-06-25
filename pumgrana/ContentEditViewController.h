@@ -58,29 +58,9 @@
 @property (nonatomic, strong) NSMutableArray *allTags;
 
 /**
- * The tags filtered by the user.
- */
-//@property (nonatomic, strong) NSMutableArray *filteredTags;
-
-/**
- * The content to edit.
- */
-//@property (nonatomic, strong) Content *content;
-
-/**
  * Temporary content to be sent to the server
  */
 @property (nonatomic, strong) Content *temporaryContent;
-
-/**
- * Title to be displayed
- */
-//@property (nonatomic, strong) NSString *currentTitle;
-
-/**
- * Description to be displayed
- */
-//@property (nonatomic, strong) NSString *currentDescription;
 
 
 

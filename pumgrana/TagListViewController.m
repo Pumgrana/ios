@@ -69,39 +69,24 @@
     Tag *tag = [self.tags objectAtIndex:indexPath.row];
     cell.textLabel.text = tag.subject;
     
-    BOOL alreadyExists = NO;
+    UISwitch *switchVview = [[UISwitch alloc] initWithFrame:CGRectZero];
+    [switchVview setOn:NO animated:NO];
+    [switchVview setTag:indexPath.row];
+    [switchVview addTarget:self action:@selector(rowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+    cell.accessoryView = switchVview;
+    
     for (Tag *t in self.selectedTags) {
         if ([t isEqualToTag:tag]) {
-            alreadyExists = YES;
-            cell.imageView.image = [UIImage imageNamed:@"tick-and-border.png"];
+            [switchVview setOn:YES];
             break ;
         }
     }
-    if (!alreadyExists)
-        cell.imageView.image = [UIImage imageNamed:@"border.png"];
 
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    Tag *tag = [self.tags objectAtIndex:indexPath.row];
-    BOOL alreadyExists = NO;
-    
-    for (Tag *t in self.selectedTags) {
-        if ([t isEqualToTag:tag]) {
-            [self.selectedTags removeObject:t];
-            alreadyExists = YES;
-            cell.imageView.image = [UIImage imageNamed:@"border.png"];
-            break ;
-        }
-    }
-    
-    if (!alreadyExists) {
-        [self.selectedTags addObject:tag];
-        cell.imageView.image = [UIImage imageNamed:@"tick-and-border.png"];
-    }
 }
 
 
@@ -111,6 +96,30 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.tagListTable reloadData];
+}
+
+
+
+
+
+/**
+ * One of the switch in the table has changed
+ */
+- (void)rowSwitchChanged:(id)sender
+{
+    UISwitch *switchView = sender;
+    Tag *tag = [self.tags objectAtIndex:switchView.tag];
+    
+    if (switchView.isOn)
+        [self.selectedTags addObject:tag];
+    else {
+        for (Tag *t in self.selectedTags) {
+            if ([t isEqualToTag:tag]) {
+                [self.selectedTags removeObject:t];
+                break ;
+            }
+        }
+    }
 }
 
 
