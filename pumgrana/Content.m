@@ -12,6 +12,22 @@
 @implementation Content
 
 /**
+ * Default constructor
+ * @return The new content
+ */
+- (id)init
+{
+    self.id = nil;
+    self.title = [[NSString alloc] init];
+    self.summary = [[NSString alloc] init];
+    self.text = [[NSString alloc] init];
+    self.tags = [[NSMutableArray alloc] init];
+    self.links = [[NSMutableArray alloc] init];
+    
+    return self;
+}
+
+/**
  * Constructor based on a content serialized in JSON coming from the response of the API
  * @param json A JSON content deserialized as a dictionary
  * @return The new content

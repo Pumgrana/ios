@@ -100,7 +100,7 @@
             // Edit content
             
             [nav pushViewController:self.contentEditView animated:YES];
-            [self.contentEditView loadContent:self.content];
+            [self.contentEditView editContent:self.content];
         } else if (buttonIndex == 1) {
             // Delete content
             

@@ -73,6 +73,7 @@
 
 
 
-- (void)loadContent:(Content *)content;
+- (void)editContent:(Content *)content;
+- (void)newContent;
 
 @end

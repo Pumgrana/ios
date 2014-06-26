@@ -296,7 +296,17 @@
  */
 + (void)insertContent:(Content *)content
 {
-    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"title\":\"%@\", \"summary\":\"%@\", \"text\":\"%@\"}", content.title, content.text, content.text];
+    NSMutableString *paramTags  = [[NSMutableString alloc] initWithString:@"["];
+    NSInteger       index       = 0;
+    for (Tag *t in content.tags) {
+        if (index > 0)
+            [paramTags appendString:@","];
+        [paramTags appendFormat:@"\"%@\"", t.id];
+        ++index;
+    }
+    [paramTags appendString:@"]"];
+    
+    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"title\":\"%@\", \"summary\":\"%@\", \"text\":\"%@\", \"tags_id\":%@}", content.title, content.summary, content.text, paramTags];
     NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
     NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     NSString    *baseUrl    = API_URL;

@@ -68,16 +68,17 @@
     
     Tag *tag = [self.tags objectAtIndex:indexPath.row];
     cell.textLabel.text = tag.subject;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    UISwitch *switchVview = [[UISwitch alloc] initWithFrame:CGRectZero];
-    [switchVview setOn:NO animated:NO];
-    [switchVview setTag:indexPath.row];
-    [switchVview addTarget:self action:@selector(rowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-    cell.accessoryView = switchVview;
+    UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+    [switchView setOn:NO animated:NO];
+    [switchView setTag:indexPath.row];
+    [switchView addTarget:self action:@selector(rowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+    cell.accessoryView = switchView;
     
     for (Tag *t in self.selectedTags) {
         if ([t isEqualToTag:tag]) {
-            [switchVview setOn:YES];
+            [switchView setOn:YES];
             break ;
         }
     }

@@ -10,8 +10,9 @@
 #import "ContentViewController.h"
 #import "AppDelegate.h"
 #import "TagListViewController.h"
+#import "ContentEditViewController.h"
 
-@class TagListViewController, ContentViewController;
+@class TagListViewController, ContentViewController, ContentEditViewController;
 
 @interface ContentListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
@@ -57,6 +58,11 @@
 
 
 
+
+/**
+ * The view to create a new content
+ */
+@property (nonatomic, strong) ContentEditViewController *contentEditView;
 
 /**
  * The view to display the content the user has chosen.

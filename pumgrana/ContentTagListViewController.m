@@ -66,6 +66,8 @@
     
     Tag *tag = [self.content.tags objectAtIndex:indexPath.row];
     cell.textLabel.text = tag.subject;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     return cell;
 }
 

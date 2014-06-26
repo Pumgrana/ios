@@ -28,6 +28,7 @@
         self.allTags = [[NSMutableArray alloc] init];
         self.filteredTags = [[NSMutableArray alloc] init];
         
+        self.contentEditView = nil;
         self.contentView = nil;
         self.tagListView = nil;
         
@@ -45,6 +46,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    if (self.contentEditView == nil)
+        self.contentEditView = [[ContentEditViewController alloc] initWithNibName:@"ContentEditViewController" bundle:[NSBundle mainBundle]];
     
     if (self.contentView == nil)
         self.contentView = [[ContentViewController alloc] initWithNibName:@"ContentViewController" bundle:[NSBundle mainBundle]];
@@ -84,6 +88,7 @@
     
     id<PartialContentProtocol> content = [self.contentsToShow objectAtIndex:indexPath.row];
     cell.textLabel.text = [content getContentTitle];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }
@@ -134,7 +139,11 @@
  */
 - (IBAction)buttonAddContentPush:(id)sender
 {
+    AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
+    [nav pushViewController:self.contentEditView animated:YES];
     
+    [self.contentEditView newContent];
 }
 
 /**

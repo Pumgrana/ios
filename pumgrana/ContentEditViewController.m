@@ -72,6 +72,12 @@
     
     self.allTags = [ApiManager getTags];
     
+    if (self.temporaryContent.id == nil) {
+        // Creating a new content instead of editing
+        
+        self.title = @"New";
+    }
+    
     self.titleField.text = self.temporaryContent.title;
     self.summaryField.text = self.temporaryContent.summary;
     self.textField.text = self.temporaryContent.text;
@@ -118,9 +124,20 @@
     self.temporaryContent.summary = self.summaryField.text;
     self.temporaryContent.text = self.textField.text;
     
-    [ApiManager updateContent:self.temporaryContent];
+    NSString *msg;
+    if (self.temporaryContent.id == nil) {
+        // Creating
+        
+        [ApiManager insertContent:self.temporaryContent];
+        msg = [[NSString alloc] initWithFormat:@"Content \"%@\" successfully created!", self.temporaryContent.title];
+    } else {
+        // Editing
+        
+        [ApiManager updateContent:self.temporaryContent];
+        msg = [[NSString alloc] initWithFormat:@"Content \"%@\" successfully edited!", self.temporaryContent.title];
+    }
     
-    [self.editAlert setMessage:[[NSString alloc] initWithFormat:@"Content \"%@\" successfully edited!", self.temporaryContent.title]];
+    [self.editAlert setMessage:msg];
     [self.editAlert show];
 }
 
@@ -141,12 +158,24 @@
 
 
 /**
- * Loads the content to edit, fills the textfields
+ * Loads a content to edit
  * @param content The content to edit
  */
-- (void)loadContent:(Content *)content
+- (void)editContent:(Content *)content
 {
     self.temporaryContent = [[Content alloc] initFromContent:content];
+}
+
+/**
+ * Prepare the view for a new content
+ */
+- (void)newContent
+{
+    self.temporaryContent = [[Content alloc] init];
+    
+    self.titleField.text = @"";
+    self.summaryField.text = @"";
+    self.textField.text = @"";
 }
 
 @end
