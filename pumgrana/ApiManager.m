@@ -99,9 +99,9 @@
  * Makes an API call to get all the tags
  * @return An array of Tag objects
  */
-+ (NSMutableArray *)getTags
++ (NSMutableArray *)getTagsWithType:(NSString *)type
 {
-    NSDictionary    *response   = [ApiManager getJSONResponse:@"/tag/list_by_type/CONTENT"];
+    NSDictionary    *response   = [ApiManager getJSONResponse:[[NSString alloc] initWithFormat:@"/tag/list_by_type/%@", type]];
     NSMutableArray  *ret        = [[NSMutableArray alloc] init];
     
     if (response) {
@@ -223,7 +223,6 @@
  * Get only links of the content containing one of the given tags
  * @param tags The tags used to filter the links
  * @param content The content we want to filter the links from
- * @param contents All the contents /!\ TO CHANGE SOON /!\
  * @return The list of filtered links
  */
 + (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content
@@ -335,7 +334,7 @@
     NSInteger       index   = 0;
     for (Content *content in contents) {
         if (index > 0)
-            [params appendString:@";"];
+            [params appendString:@","];
         [params appendFormat:@"\"%@\"", content.id];
         ++index;
     }
@@ -344,6 +343,73 @@
     NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
     NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     NSString    *url        = [[NSString alloc] initWithFormat:@"%@/content/delete", API_URL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLResponse   *response;
+    NSError         *error;
+    
+    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+}
+
+/**
+ * Insert a link in a content
+ * @param link The link to insert
+ * @param content The content meant to own the link
+ */
++ (void)insertLink:(Link *)link content:(Content *)content
+{
+    NSMutableString *params = [[NSMutableString alloc] initWithFormat:@"{\"id_from\":\"%@\", \"ids_to\":[\"%@\"], \"tags_id\":[[", content.id, link.contentId];
+    NSInteger       index = 0;
+    for (Tag *tag in link.tags) {
+        if (index > 0)
+            [params appendString:@","];
+        [params appendFormat:@"\"%@\"", tag.id];
+        ++index;
+    }
+    [params appendString:@"]]}"];
+    
+    NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    NSString    *url        = [[NSString alloc] initWithFormat:@"%@/link/insert", API_URL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLResponse   *response;
+    NSError         *error;
+    
+    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+}
+
+/**
+ * Delete links
+ * @param links The list of links to content
+ */
++ (void)deleteLinks:(NSMutableArray *)links
+{
+    NSMutableString *params = [[NSMutableString alloc] initWithString:@"{\"links_id\":["];
+    NSInteger       index = 0;
+    for (Link *link in links) {
+        if (index > 0)
+            [params appendString:@","];
+        [params appendFormat:@"\"%@\"", link.id];
+        ++index;
+    }
+    [params appendString:@"]}"];
+    
+    NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    NSString    *url        = [[NSString alloc] initWithFormat:@"%@/link/delete", API_URL];
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:url]];

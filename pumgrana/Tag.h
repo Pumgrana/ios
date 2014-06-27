@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define TAG_TYPE_CONTENT    (@"CONTENT")
+#define TAG_TYPE_LINK       (@"LINK")
+
 @interface Tag : NSObject
 
 @property (nonatomic, strong) NSString *id;

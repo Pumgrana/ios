@@ -117,7 +117,7 @@
         self.navigationItem.rightBarButtonItem = self.addContentButton;
         
         self.contentsToShow = [ApiManager getContentsFilteredByTags:self.filteredTags];
-        self.allTags = [ApiManager getTags];
+        self.allTags = [ApiManager getTagsWithType:TAG_TYPE_CONTENT];
     } else {
         // Case 2: Displaying a content's links
         

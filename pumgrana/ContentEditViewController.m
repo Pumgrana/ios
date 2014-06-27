@@ -24,6 +24,7 @@
         // Custom initialization
         
         self.temporaryContent = nil;
+        self.savedLinks = nil;
         
         self.tagListView = nil;
         self.contentEditLinksView = nil;
@@ -75,7 +76,7 @@
 {
     [super viewWillAppear:animated];
     
-    self.allTags = [ApiManager getTags];
+    self.allTags = [ApiManager getTagsWithType:TAG_TYPE_CONTENT];
     
     if (self.temporaryContent.id == nil) {
         // Creating a new content instead of editing
@@ -135,6 +136,43 @@
         // Editing
         
         [ApiManager updateContent:self.temporaryContent];
+        
+        for (Link *link in self.temporaryContent.links) {
+            BOOL found = NO;
+            
+            for (Link *savedLink in self.savedLinks) {
+                //if ([savedLink isEqualToLink:link] && [link.tags count] > 0) {
+                if ([savedLink.contentId isEqualToString:link.contentId] && [link.tags count] > 0) {
+                    // Link has been modified
+                    
+                    [ApiManager deleteLinks:[[NSMutableArray alloc] initWithObjects:savedLink, nil]];
+                    [ApiManager insertLink:link content:self.temporaryContent];
+                    found = YES;
+                }
+            }
+            
+            if (!found) {
+                // Link has been created
+                
+                [ApiManager insertLink:link content:self.temporaryContent];
+            }
+        }
+        
+        for (Link *savedLink in self.savedLinks) {
+            BOOL found = NO;
+            
+            for (Link *link in self.temporaryContent.links) {
+                if ([savedLink.contentId isEqualToString:link.contentId])
+                    found = YES;
+            }
+            
+            if (!found) {
+                // Link has been deleted
+                
+                [ApiManager deleteLinks:[[NSMutableArray alloc] initWithObjects:savedLink, nil]];
+            }
+        }
+        
         msg = [[NSString alloc] initWithFormat:@"Content \"%@\" successfully edited!", self.temporaryContent.title];
     }
     
@@ -177,6 +215,7 @@
 - (void)editContent:(Content *)content
 {
     self.temporaryContent = [[Content alloc] initFromContent:content];
+    self.savedLinks = [[NSMutableArray alloc] initWithArray:self.temporaryContent.links];
 }
 
 /**

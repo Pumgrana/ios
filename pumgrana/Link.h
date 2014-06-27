@@ -28,4 +28,6 @@
 - (id)initFromJson:(NSDictionary *)json;
 - (id)initFromContent:(Content *)content;
 
+- (BOOL)isEqualToLink:(Link *)link;
+
 @end

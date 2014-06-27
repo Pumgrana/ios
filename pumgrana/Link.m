@@ -47,6 +47,18 @@
 
 
 /**
+ * Tests if it is equal to another link
+ */
+- (BOOL)isEqualToLink:(Link *)link
+{
+    return [self.id isEqualToString:link.id];
+}
+
+
+
+
+
+/**
  * Gets the id of the linked content
  * @return The linked content's id
  */

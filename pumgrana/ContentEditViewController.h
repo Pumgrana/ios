@@ -64,6 +64,11 @@
 @property (nonatomic, strong) NSMutableArray *allTags;
 
 /**
+ * Original list of links
+ */
+@property (nonatomic, strong) NSMutableArray *savedLinks;
+
+/**
  * Temporary content to be sent to the server
  */
 @property (nonatomic, strong) Content *temporaryContent;

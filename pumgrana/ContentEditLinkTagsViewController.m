@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ContentEditLinkTagsViewController.h"
+#import "ApiManager.h"
 
 @interface ContentEditLinkTagsViewController ()
 
@@ -106,7 +107,7 @@
 {
     [super viewWillAppear:animated];
     
-    // TODO: load "link" tags via API
+    self.tags = [ApiManager getTagsWithType:TAG_TYPE_LINK];
     
     [self.tagTableView reloadData];
 }

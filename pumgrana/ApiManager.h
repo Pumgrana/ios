@@ -20,7 +20,7 @@
 
 + (NSMutableArray *)getContents;
 + (Content *)getContentWithId:(NSString *)id;
-+ (NSMutableArray *)getTags;
++ (NSMutableArray *)getTagsWithType:(NSString *)type;
 + (NSMutableArray *)getContentLinks:(Content *)content;
 + (NSMutableArray *)getContentTags:(Content *)content;
 + (NSMutableArray *)getTagsFromContentLinks:(Content *)content;
@@ -30,5 +30,7 @@
 + (void)updateContent:(Content *)content;
 + (void)insertContent:(Content *)content;
 + (void)deleteContents:(NSMutableArray *)contents;
++ (void)insertLink:(Link *)link content:(Content *)content;
++ (void)deleteLinks:(NSMutableArray *)links;
 
 @end
