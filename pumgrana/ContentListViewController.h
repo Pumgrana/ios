@@ -22,12 +22,12 @@
 @property (nonatomic, retain) UIBarButtonItem *addContentButton;
 
 /**
- * Label with the list of the filtered tags.
+ * Label with the list of the filtered tags
  */
 @property (weak, nonatomic) IBOutlet UILabel *tagListLabel;
 
 /**
- * Table to display the contents in.
+ * Table to display the contents in
  */
 @property (nonatomic, strong) IBOutlet UITableView *contentTableView;
 
@@ -41,17 +41,17 @@
 @property (nonatomic, strong) Content *content;
 
 /**
- * The contents to display.
+ * The contents to display
  */
 @property (nonatomic, strong) NSMutableArray *contentsToShow;
 
 /**
- * All the tags.
+ * All the tags
  */
 @property (nonatomic, strong) NSMutableArray *allTags;
 
 /**
- * The tags filtered by the user.
+ * The tags filtered by the user
  */
 @property (nonatomic, strong) NSMutableArray *filteredTags;
 

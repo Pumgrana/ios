@@ -68,6 +68,27 @@
     return self;
 }
 
+
+/**
+ * Tests if the content is equal to another
+ * @param content The content to compare to
+ * @return YES or NO whether the contents are the same or not
+ */
+- (BOOL)isEqualToContent: (Content *)content
+{
+    return [self.id isEqualToString:content.id];
+}
+
+/**
+ * Tests if the content is equal to a link
+ * @param link The link to compare to
+ * @return YES if the link relates to this content
+ */
+- (BOOL)isEqualToLink:(Link *)link
+{
+    return [self.id isEqualToString:link.contentId];
+}
+
 /**
  * Tests if the content has a given tag
  * @param tag The tag to search for

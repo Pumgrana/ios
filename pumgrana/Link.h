@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "PartialContentProtocol.h"
+#import "Content.h"
+
+@class Content;
 
 @interface Link : NSObject <PartialContentProtocol>
 
@@ -16,6 +19,13 @@
 @property (nonatomic, strong) NSString  *contentTitle;
 @property (nonatomic, strong) NSString  *contentSummary;
 
+@property (nonatomic, strong) NSMutableArray *tags;
+
+
+
+
+
 - (id)initFromJson:(NSDictionary *)json;
+- (id)initFromContent:(Content *)content;
 
 @end

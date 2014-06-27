@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "Tag.h"
 #import "PartialContentProtocol.h"
+#import "Link.h"
+
+@class Link;
 
 @interface Content : NSObject <PartialContentProtocol>
 
@@ -27,6 +30,8 @@
 - (id)initFromJson:(NSDictionary *)json;
 - (id)initFromContent:(Content *)content;
 
-- (BOOL)hasTag: (Tag *)tag;
+- (BOOL)isEqualToContent:(Content *)content;
+- (BOOL)isEqualToLink:(Link *)link;
+- (BOOL)hasTag:(Tag *)tag;
 
 @end

@@ -13,6 +13,7 @@
 /**
  * Constructor based on a link serialized in JSON coming from the response of the API
  * @param json A JSON link deserialized as a dictionary
+ * @return The new link
  */
 - (id)initFromJson:(NSDictionary *)json
 {
@@ -20,6 +21,23 @@
     self.contentId = [json objectForKey:@"content_id"];
     self.contentTitle = [json objectForKey:@"content_title"];
     self.contentSummary = [json objectForKey:@"content_summary"];
+    self.tags = [[NSMutableArray alloc] init];
+    
+    return self;
+}
+
+/**
+ * Construct from a content
+ * @param content The content to copy
+ * @return The new link
+ */
+- (id)initFromContent:(Content *)content
+{
+    self.id = nil;
+    self.contentId = content.id;
+    self.contentTitle = content.title;
+    self.contentSummary = content.summary;
+    self.tags = [[NSMutableArray alloc] init];
     
     return self;
 }

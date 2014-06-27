@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "ContentEditViewController.h"
 #import "ApiManager.h"
+#import "ContentEditLinksViewController.h"
 
 @interface ContentEditViewController ()
 
@@ -25,6 +26,7 @@
         self.temporaryContent = nil;
         
         self.tagListView = nil;
+        self.contentEditLinksView = nil;
         
         self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(buttonDonePush:)];
         
@@ -52,6 +54,9 @@
     
     if (self.tagListView == nil)
         self.tagListView = [[TagListViewController alloc] initWithNibName:@"TagListViewController" bundle:[NSBundle mainBundle]];
+    
+    if (self.contentEditLinksView == nil)
+        self.contentEditLinksView = [[ContentEditLinksViewController alloc] initWithNibName:@"ContentEditLinksViewController" bundle:[NSBundle mainBundle]];
     
     self.title = @"Edit";
 }
@@ -111,12 +116,8 @@
     }
 }
 
-
-
-
-
 /**
- * When pushing the send button.
+ * When pushing the done button
  */
 - (IBAction)buttonDonePush:(id)sender;
 {
@@ -142,7 +143,7 @@
 }
 
 /**
- * When the tags button is pushed.
+ * When the tags button is pushed
  */
 - (IBAction)buttonTagsPush:(id)sender
 {
@@ -151,6 +152,18 @@
     [nav pushViewController:self.tagListView animated:YES];
     
     [self.tagListView loadDataWithTags:self.allTags selectedTags:self.temporaryContent.tags];
+}
+
+/**
+ * When the links button is pushed
+ */
+- (IBAction)buttonLinksPush:(id)sender
+{
+    AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
+    [nav pushViewController:self.contentEditLinksView animated:YES];
+    
+    self.contentEditLinksView.content = self.temporaryContent;
 }
 
 

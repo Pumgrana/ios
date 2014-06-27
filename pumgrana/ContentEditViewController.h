@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Content.h"
 #import "TagListViewController.h"
+#import "ContentEditLinksViewController.h"
 
 @class TagListViewController;
 
@@ -20,7 +21,7 @@
 @property (nonatomic, strong) UIAlertView *editAlert;
 
 /**
- * Send button in navigation bar
+ * Done button in navigation bar
  */
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
 
@@ -48,6 +49,11 @@
  */
 @property (nonatomic, strong) TagListViewController *tagListView;
 
+/**
+ * Links edit view
+ */
+@property (nonatomic, strong) ContentEditLinksViewController *contentEditLinksView;
+
 
 
 
@@ -66,8 +72,10 @@
 
 
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 - (IBAction)buttonDonePush:(id)sender;
 - (IBAction)buttonTagsPush:(id)sender;
+- (IBAction)buttonLinksPush:(id)sender;
 
 
 
