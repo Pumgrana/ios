@@ -292,8 +292,9 @@
 /**
  * Creates a new content
  * @param content The content to create
+ * @return The new content's id
  */
-+ (void)insertContent:(Content *)content
++ (NSString *)insertContent:(Content *)content
 {
     NSMutableString *paramTags  = [[NSMutableString alloc] initWithString:@"["];
     NSInteger       index       = 0;
@@ -321,7 +322,10 @@
     NSURLResponse *response;
     NSError *error;
     
-    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
+    
+    return [[jsonResponse objectForKey:@"content_id"] objectAtIndex:0];
 }
 
 /**

@@ -28,7 +28,7 @@
 + (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content;
 
 + (void)updateContent:(Content *)content;
-+ (void)insertContent:(Content *)content;
++ (NSString *)insertContent:(Content *)content;
 + (void)deleteContents:(NSMutableArray *)contents;
 + (void)insertLink:(Link *)link content:(Content *)content;
 + (void)deleteLinks:(NSMutableArray *)links;

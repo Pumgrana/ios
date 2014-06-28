@@ -130,7 +130,12 @@
     if (self.temporaryContent.id == nil) {
         // Creating
         
-        [ApiManager insertContent:self.temporaryContent];
+        NSString *id = [ApiManager insertContent:self.temporaryContent];
+        self.temporaryContent.id = id;
+        
+        for (Link *link in self.temporaryContent.links)
+            [ApiManager insertLink:link content:self.temporaryContent];
+        
         msg = [[NSString alloc] initWithFormat:@"Content \"%@\" successfully created!", self.temporaryContent.title];
     } else {
         // Editing
@@ -141,7 +146,6 @@
             BOOL found = NO;
             
             for (Link *savedLink in self.savedLinks) {
-                //if ([savedLink isEqualToLink:link] && [link.tags count] > 0) {
                 if ([savedLink.contentId isEqualToString:link.contentId] && [link.tags count] > 0) {
                     // Link has been modified
                     
