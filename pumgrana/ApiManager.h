@@ -32,5 +32,7 @@
 + (void)deleteContents:(NSMutableArray *)contents;
 + (void)insertLink:(Link *)link content:(Content *)content;
 + (void)deleteLinks:(NSMutableArray *)links;
++ (NSString *)insertTag:(Tag *)tag type:(NSString *)type;
++ (void)deleteTags:(NSMutableArray *)tags;
 
 @end

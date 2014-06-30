@@ -37,6 +37,9 @@
 		826B3366183FF0B300FB8FC0 /* border.png in Resources */ = {isa = PBXBuildFile; fileRef = 826B3364183FF0B300FB8FC0 /* border.png */; };
 		826B3367183FF0B300FB8FC0 /* tick-and-border.png in Resources */ = {isa = PBXBuildFile; fileRef = 826B3365183FF0B300FB8FC0 /* tick-and-border.png */; };
 		826B336D1840119800FB8FC0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 826B336C1840119800FB8FC0 /* MainViewController.m */; };
+		82A4C71A1960886E00291FE1 /* red-trash-40x40.png in Resources */ = {isa = PBXBuildFile; fileRef = 82A4C7191960886E00291FE1 /* red-trash-40x40.png */; };
+		82A4C71E1961F7AF00291FE1 /* EditTagViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82A4C71C1961F7AF00291FE1 /* EditTagViewController.m */; };
+		82A4C71F1961F7AF00291FE1 /* EditTagViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82A4C71D1961F7AF00291FE1 /* EditTagViewController.xib */; };
 		82BA059718A8188500E0D1B2 /* ApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 82BA059618A8188500E0D1B2 /* ApiManager.m */; };
 		82BE0D5C18F2FF8700D2B810 /* ContentEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82BE0D5A18F2FF8600D2B810 /* ContentEditViewController.m */; };
 		82BE0D5D18F2FF8700D2B810 /* ContentEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82BE0D5B18F2FF8700D2B810 /* ContentEditViewController.xib */; };
@@ -101,6 +104,10 @@
 		826B3365183FF0B300FB8FC0 /* tick-and-border.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tick-and-border.png"; path = "Ressources/tick-and-border.png"; sourceTree = "<group>"; };
 		826B336B1840119800FB8FC0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		826B336C1840119800FB8FC0 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		82A4C7191960886E00291FE1 /* red-trash-40x40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "red-trash-40x40.png"; path = "../../../Downloads/red-trash-40x40.png"; sourceTree = "<group>"; };
+		82A4C71B1961F7AF00291FE1 /* EditTagViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditTagViewController.h; sourceTree = "<group>"; };
+		82A4C71C1961F7AF00291FE1 /* EditTagViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditTagViewController.m; sourceTree = "<group>"; };
+		82A4C71D1961F7AF00291FE1 /* EditTagViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditTagViewController.xib; sourceTree = "<group>"; };
 		82BA059518A8188500E0D1B2 /* ApiManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApiManager.h; sourceTree = "<group>"; };
 		82BA059618A8188500E0D1B2 /* ApiManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApiManager.m; sourceTree = "<group>"; };
 		82BE0D5918F2FF8600D2B810 /* ContentEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentEditViewController.h; sourceTree = "<group>"; };
@@ -143,6 +150,9 @@
 				826B335D183FCB8E00FB8FC0 /* TagListViewController.xib */,
 				826B335A183FCB3100FB8FC0 /* TagListViewController.h */,
 				826B335B183FCB3100FB8FC0 /* TagListViewController.m */,
+				82A4C71D1961F7AF00291FE1 /* EditTagViewController.xib */,
+				82A4C71B1961F7AF00291FE1 /* EditTagViewController.h */,
+				82A4C71C1961F7AF00291FE1 /* EditTagViewController.m */,
 				826B334A18340D9300FB8FC0 /* ContentViewController.xib */,
 				826B334718340BB900FB8FC0 /* ContentViewController.h */,
 				826B334818340BB900FB8FC0 /* ContentViewController.m */,
@@ -259,6 +269,7 @@
 		826B3361183FEC7A00FB8FC0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				82A4C7191960886E00291FE1 /* red-trash-40x40.png */,
 				826B3364183FF0B300FB8FC0 /* border.png */,
 				826B3365183FF0B300FB8FC0 /* tick-and-border.png */,
 				826B3362183FECA200FB8FC0 /* tick.png */,
@@ -344,7 +355,9 @@
 				826B334B18340D9300FB8FC0 /* ContentViewController.xib in Resources */,
 				826B3367183FF0B300FB8FC0 /* tick-and-border.png in Resources */,
 				826B33561839982100FB8FC0 /* ContentTagListViewController.xib in Resources */,
+				82A4C71F1961F7AF00291FE1 /* EditTagViewController.xib in Resources */,
 				826B332F182DC53E00FB8FC0 /* Main.storyboard in Resources */,
+				82A4C71A1960886E00291FE1 /* red-trash-40x40.png in Resources */,
 				826B3366183FF0B300FB8FC0 /* border.png in Resources */,
 				826B330A182DB78F00FB8FC0 /* InfoPlist.strings in Resources */,
 				826B3363183FECA200FB8FC0 /* tick.png in Resources */,
@@ -383,6 +396,7 @@
 				821519061959C471009BD7BC /* Link.m in Sources */,
 				826B333818330E9400FB8FC0 /* ContentListViewController.m in Sources */,
 				826B3310182DB78F00FB8FC0 /* AppDelegate.m in Sources */,
+				82A4C71E1961F7AF00291FE1 /* EditTagViewController.m in Sources */,
 				826B334E18398FF700FB8FC0 /* Content.m in Sources */,
 				826B330C182DB78F00FB8FC0 /* main.m in Sources */,
 			);

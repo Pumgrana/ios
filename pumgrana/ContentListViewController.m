@@ -154,8 +154,11 @@
     AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
     UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
     [nav pushViewController:self.tagListView animated:YES];
-     
-    [self.tagListView loadDataWithTags:self.allTags selectedTags:self.filteredTags];
+    
+    if (self.content == nil)
+        [self.tagListView loadDataWithTags:self.allTags selectedTags:self.filteredTags type:TAG_TYPE_CONTENT];
+    else
+        [self.tagListView loadDataWithTags:self.allTags selectedTags:self.filteredTags type:TAG_TYPE_LINK];
 }
 
 

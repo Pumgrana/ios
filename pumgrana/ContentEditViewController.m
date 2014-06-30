@@ -193,7 +193,7 @@
     UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
     [nav pushViewController:self.tagListView animated:YES];
     
-    [self.tagListView loadDataWithTags:self.allTags selectedTags:self.temporaryContent.tags];
+    [self.tagListView loadDataWithTags:self.allTags selectedTags:self.temporaryContent.tags type:TAG_TYPE_CONTENT];
 }
 
 /**

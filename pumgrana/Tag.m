@@ -10,6 +10,14 @@
 
 @implementation Tag
 
+- (id)init
+{
+    self.id = nil;
+    self.subject = [[NSString alloc] init];
+    
+    return self;
+}
+
 /**
  * Constructor based on a tag serialized in JSON coming from the response of the API
  * @param json A JSON tag deserialized as a dictionary

@@ -428,4 +428,61 @@
     [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 }
 
++ (NSString *)insertTag:(Tag *)tag type:(NSString *)type
+{
+    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"type_name\":\"%@\", \"tags_subject\":[\"%@\"]}", type, tag.subject];
+    NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    NSString    *url        = [[NSString alloc] initWithFormat:@"%@/tag/insert", API_URL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLResponse   *response;
+    NSError         *error;
+    
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    
+    // Maybe to delete with API 1.5 if id is normal
+    NSString *str = [[NSString alloc] initWithData:responseData encoding:NSISOLatin1StringEncoding];
+    
+    NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&error];
+    NSArray *ids = [jsonResponse objectForKey:@"tags_id"];
+    
+    return [[ids objectAtIndex:0] objectForKey:@"_id"];
+}
+
++ (void)deleteTags:(NSMutableArray *)tags
+{
+    NSMutableString *params = [[NSMutableString alloc] initWithString:@"{\"tags_id\":["];
+    NSInteger       index = 0;
+    for (Link *tag in tags) {
+        if (index > 0)
+            [params appendString:@","];
+        [params appendFormat:@"\"%@\"", tag.id];
+        ++index;
+    }
+    [params appendString:@"]}"];
+    
+    NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    NSString    *url        = [[NSString alloc] initWithFormat:@"%@/tag/delete", API_URL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLResponse   *response;
+    NSError         *error;
+    
+    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+}
+
 @end
