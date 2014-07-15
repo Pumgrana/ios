@@ -25,11 +25,19 @@
         self.link = nil;
         self.content = nil;
         self.tags = [[NSMutableArray alloc] init];
+        self.isDeleting = NO;
+        
+        self.editTagView = nil;
         
         self.errorAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:nil delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         self.errorAlert.tag = 1;
         
         self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(buttonDonePush:)];
+        
+        self.actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(buttonActionPush:)];
+        
+        self.actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add tag", @"Delete tag", nil];
+        self.actionSheet.tag = 1;
     }
     return self;
 }
@@ -43,7 +51,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self.navigationItem.rightBarButtonItem = self.doneButton;
+    if (self.editTagView == nil)
+        self.editTagView = [[EditTagViewController alloc] initWithNibName:@"EditTagViewController" bundle:[NSBundle mainBundle]];
+    
+    self.navigationItem.rightBarButtonItems = [[NSArray alloc] initWithObjects:self.doneButton, self.actionButton, nil];
+    
+    self.title = @"Tags";
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,16 +92,25 @@
     cell.textLabel.text = tag.subject;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
-    [switchView setOn:NO animated:NO];
-    [switchView setTag:indexPath.row];
-    [switchView addTarget:self action:@selector(rowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-    cell.accessoryView = switchView;
-    
-    for (Tag *t in self.link.tags) {
-        if ([t isEqualToTag:tag]) {
-            [switchView setOn:YES animated:NO];
-            break ;
+    if (self.isDeleting) {
+        UIButton *buttonView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        UIImage *image = [UIImage imageNamed:@"red-trash-40x40.png"];
+        [buttonView setImage:image forState:UIControlStateNormal];
+        [buttonView setTag:indexPath.row];
+        [buttonView addTarget:self action:@selector(buttonTagRowDeletePush:) forControlEvents:UIControlEventTouchDown];
+        cell.accessoryView = buttonView;
+    } else {
+        UISwitch *switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
+        [switchView setOn:NO animated:NO];
+        [switchView setTag:indexPath.row];
+        [switchView addTarget:self action:@selector(rowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        cell.accessoryView = switchView;
+        
+        for (Tag *t in self.link.tags) {
+            if ([t isEqualToTag:tag]) {
+                [switchView setOn:YES animated:NO];
+                break ;
+            }
         }
     }
     
@@ -117,6 +139,14 @@
 
 
 /**
+ * When pushing a delete button on a row
+ */
+- (IBAction)buttonTagRowDeletePush:(id)sender
+{
+    
+}
+
+/**
  * When pushing the done button
  */
 - (IBAction)buttonDonePush:(id)sender
@@ -130,6 +160,47 @@
         AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
         UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
         [nav popViewControllerAnimated:YES];
+    }
+}
+
+/**
+ * When pushing the action button
+ */
+- (IBAction)buttonActionPush:(id)sender
+{
+    [self.actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+/**
+ * When pushing a button on the action sheet
+ */
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == 1) {
+        // Actions "popup"
+        
+        if (buttonIndex == 0) {
+            // Add tag
+            
+            AppDelegate *del = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            UINavigationController *nav = (UINavigationController *)(del.window.rootViewController);
+            [nav pushViewController:self.editTagView animated:YES];
+            
+            [self.editTagView addTagWithType:TAG_TYPE_LINK tags:self.tags selectedTags:self.link.tags];
+        } else if (buttonIndex == 1) {
+            // Delete tag or Cancel deleting
+            
+            if (self.isDeleting) {
+                self.actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add tag", @"Delete tag", nil];
+                self.isDeleting = NO;
+            } else {
+                self.actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add tag", @"Cancel deleting mode", nil];
+                self.isDeleting = YES;
+            }
+            
+            self.actionSheet.tag = 1;
+            [self.tagTableView reloadData];
+        }
     }
 }
 
@@ -164,10 +235,19 @@
 
 
 
+/**
+ * Loads view data
+ */
 - (void)editLink:(Link *)link content:(Content *)content
 {
     self.link = link;
     self.content = content;
+    self.isDeleting = NO;
+    
+    self.actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add tag", @"Delete tag", nil];
+    self.actionSheet.tag = 1;
+    
+    [self.tagTableView reloadData];
 }
 
 @end

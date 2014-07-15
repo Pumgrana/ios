@@ -100,7 +100,7 @@
     [nav pushViewController:self.contentView animated:YES];
 
     id <PartialContentProtocol> content = [self.contentsToShow objectAtIndex:indexPath.row];
-    [self.contentView loadContentWithId:[content getContentId]];
+    [self.contentView loadContentWithUri:[content getContentUri]];
 }
 
 

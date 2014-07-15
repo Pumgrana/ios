@@ -44,6 +44,10 @@
  */
 @property (weak, nonatomic) IBOutlet UITextView *textTextView;
 
+/**
+ * Webview to display if it is an external content
+ */
+@property (weak, nonatomic) IBOutlet UIWebView *bodyWebView;
 
 
 
@@ -95,6 +99,6 @@
 
 
 
-- (void)loadContentWithId:(NSString *)id;
+- (void)loadContentWithUri:(NSString *)uri;
 
 @end

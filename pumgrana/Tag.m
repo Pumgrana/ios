@@ -12,7 +12,7 @@
 
 - (id)init
 {
-    self.id = nil;
+    self.uri = nil;
     self.subject = [[NSString alloc] init];
     
     return self;
@@ -24,7 +24,7 @@
  */
 - (id)initFromJson:(NSDictionary *)json
 {
-    self.id = [json objectForKey:@"_id"];
+    self.uri = [json objectForKey:@"uri"];
     self.subject = [json objectForKey:@"subject"];
     return self;
 }
@@ -36,7 +36,7 @@
  */
 - (BOOL)isEqualToTag:(Tag *)tag
 {
-    return [self.id isEqualToString:tag.id];
+    return [self.uri isEqualToString:tag.uri];
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "Content.h"
 #import "Tag.h"
 #import "Link.h"
+#import "NSString+Encode.h"
 
 @implementation ApiManager
 
@@ -51,6 +52,12 @@
     return (nil);
 }
 
++ (NSString *)urlEncode:(NSString *)urlStr
+{
+    //return [urlStr stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
+    return [urlStr encodeString:NSUTF8StringEncoding];
+}
+
 /**
  * Makes an API call to get all the contents
  * @return An array of Content objects
@@ -63,9 +70,11 @@
     if (response) {
         NSArray *contents   = [response objectForKey:@"contents"];
         
-        for (NSDictionary *content in contents) {
-            Content *c = [[Content alloc] initFromJson:content];
-            [ret addObject:c];
+        if (![contents isEqual:[NSNull null]]) {
+            for (NSDictionary *content in contents) {
+                Content *c = [[Content alloc] initFromJson:content];
+                [ret addObject:c];
+            }
         }
     }
     
@@ -74,16 +83,16 @@
 
 /**
  * Gets a full detailed content via the API
- * @param id The id of the content we want
+ * @param uri The uri of the content we want
  * @return The content we want
  */
-+ (Content *)getContentWithId:(NSString *)id
++ (Content *)getContentWithUri:(NSString *)uri
 {
-    NSString        *url        = [[NSString alloc] initWithFormat:@"/content/detail/%@", id];
+    NSString        *url        = [[NSString alloc] initWithFormat:@"/content/detail/%@", [ApiManager urlEncode:uri]];
     NSDictionary    *response   = [ApiManager getJSONResponse:url];
     Content         *content    = [[Content alloc] init];
     
-    content.id = id;
+    content.uri = uri;
     
     if (response) {
         NSArray *contentArray = [response objectForKey:@"contents"];
@@ -97,6 +106,7 @@
 
 /**
  * Makes an API call to get all the tags
+ * @param type type of the tags to retrieve (CONTENT or LINK)
  * @return An array of Tag objects
  */
 + (NSMutableArray *)getTagsWithType:(NSString *)type
@@ -107,9 +117,11 @@
     if (response) {
         NSArray *tags   = [response objectForKey:@"tags"];
         
-        for (NSDictionary *tag in tags) {
-            Tag *t = [[Tag alloc] initFromJson:tag];
-            [ret addObject:t];
+        if (![tags isEqual:[NSNull null]]) {
+            for (NSDictionary *tag in tags) {
+                Tag *t = [[Tag alloc] initFromJson:tag];
+                [ret addObject:t];
+            }
         }
     }
     
@@ -124,7 +136,7 @@
 + (NSMutableArray *)getContentLinks:(Content *)content
 {
     NSString        *url        = @"/link/list_from_content/";
-    NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingFormat:@"%@", content.id]];
+    NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingFormat:@"%@", [ApiManager urlEncode:content.uri]]];
     NSMutableArray  *links      = [[NSMutableArray alloc] init];
     
     if (response) {
@@ -149,15 +161,17 @@
 + (NSMutableArray *)getContentTags:(Content *)content
 {
     NSString        *url        = @"/tag/list_from_content/";
-    NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingFormat:@"%@", content.id]];
+    NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingFormat:@"%@", [ApiManager urlEncode:content.uri]]];
     NSMutableArray  *tags       = [[NSMutableArray alloc] init];
     
     if (response) {
         NSArray *tagArray  = [response objectForKey:@"tags"];
         
-        for (NSDictionary *tag in tagArray) {
-            Tag *newTag = [[Tag alloc] initFromJson:tag];
-            [tags addObject:newTag];
+        if (![tagArray isEqual:[NSNull null]]) {
+            for (NSDictionary *tag in tagArray) {
+                Tag *newTag = [[Tag alloc] initFromJson:tag];
+                [tags addObject:newTag];
+            }
         }
     }
     
@@ -172,7 +186,7 @@
 + (NSMutableArray *)getTagsFromContentLinks:(Content *)content
 {
     NSString        *url        = @"/tag/list_from_content_links/";
-    NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingString:content.id]];
+    NSDictionary    *response   = [ApiManager getJSONResponse:[url stringByAppendingString:[ApiManager urlEncode:content.uri]]];
     NSMutableArray  *linkTags   = [[NSMutableArray alloc] init];
     
     if (response) {
@@ -198,7 +212,7 @@
 {
     NSMutableString *paramTags  = [[NSMutableString alloc] init];
     for (Tag *tag in tags) {
-        [paramTags appendFormat:@"%@/", tag.id];
+        [paramTags appendFormat:@"%@/", [ApiManager urlEncode:tag.uri]];
     }
     
     NSString        *url        = [[NSString alloc] initWithFormat:@"/content/list_content//%@", paramTags];
@@ -229,10 +243,10 @@
 {
     NSMutableString *paramTags  = [[NSMutableString alloc] init];
     for (Tag *tag in tags) {
-        [paramTags appendFormat:@"%@/", tag.id];
+        [paramTags appendFormat:@"%@/", [ApiManager urlEncode:tag.uri]];
     }
     
-    NSString        *url        = [[NSString alloc] initWithFormat:@"/link/list_from_content_tags/%@/%@", content.id, paramTags];
+    NSString        *url        = [[NSString alloc] initWithFormat:@"/link/list_from_content_tags/%@/%@", [ApiManager urlEncode:content.uri], paramTags];
     NSDictionary    *response   = [ApiManager getJSONResponse:url];
     NSMutableArray  *links      = [[NSMutableArray alloc] init];
     
@@ -265,12 +279,12 @@
     for (Tag *t in content.tags) {
         if (index > 0)
             [paramTags appendString:@","];
-        [paramTags appendFormat:@"\"%@\"", t.id];
+        [paramTags appendFormat:@"\"%@\"", t.uri];
         ++index;
     }
     [paramTags appendString:@"]"];
     
-    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"content_id\":\"%@\",\"title\":\"%@\", \"summary\":\"%@\",\"text\":\"%@\",\"tags_id\":%@}", content.id, content.title, content.summary, content.text, paramTags];
+    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"content_uri\":\"%@\",\"title\":\"%@\", \"summary\":\"%@\",\"body\":\"%@\",\"tags_uri\":%@}", content.uri, content.title, content.summary, content.body, paramTags];
     NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
     NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     NSString    *baseUrl    = API_URL;
@@ -290,9 +304,44 @@
 }
 
 /**
+ * Updates only the tags of a content
+ * @param content The content to update
+ */
++ (void)updateContentTags:(Content *)content
+{
+    NSMutableString *paramTags  = [[NSMutableString alloc] initWithString:@"["];
+    NSInteger       index       = 0;
+    for (Tag *t in content.tags) {
+        if (index > 0)
+            [paramTags appendString:@","];
+        [paramTags appendFormat:@"\"%@\"", t.uri];
+        ++index;
+    }
+    [paramTags appendString:@"]"];
+    
+    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"content_uri\":\"%@\",\"tags_uri\":%@}", content.uri, paramTags];
+    NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
+    NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    NSString    *baseUrl    = API_URL;
+    NSString    *url        = [baseUrl stringByAppendingString:@"/content/update_tags"];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:url]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    NSURLResponse *response;
+    NSError *error;
+    
+    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+}
+
+/**
  * Creates a new content
  * @param content The content to create
- * @return The new content's id
+ * @return The new content's uri
  */
 + (NSString *)insertContent:(Content *)content
 {
@@ -301,12 +350,12 @@
     for (Tag *t in content.tags) {
         if (index > 0)
             [paramTags appendString:@","];
-        [paramTags appendFormat:@"\"%@\"", t.id];
+        [paramTags appendFormat:@"\"%@\"", t.uri];
         ++index;
     }
     [paramTags appendString:@"]"];
     
-    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"title\":\"%@\", \"summary\":\"%@\", \"text\":\"%@\", \"tags_id\":%@}", content.title, content.summary, content.text, paramTags];
+    NSString    *params     = [[NSString alloc] initWithFormat:@"{\"title\":\"%@\", \"summary\":\"%@\", \"body\":\"%@\", \"tags_uri\":%@}", content.title, content.summary, content.body, paramTags];
     NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
     NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     NSString    *baseUrl    = API_URL;
@@ -325,7 +374,7 @@
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil];
     
-    return [[jsonResponse objectForKey:@"content_id"] objectAtIndex:0];
+    return [[jsonResponse objectForKey:@"content_uri"] objectAtIndex:0];
 }
 
 /**
@@ -334,12 +383,12 @@
  */
 + (void)deleteContents:(NSMutableArray *)contents
 {
-    NSMutableString *params = [[NSMutableString alloc] initWithFormat:@"{\"contents_id\":["];
+    NSMutableString *params = [[NSMutableString alloc] initWithFormat:@"{\"contents_uri\":["];
     NSInteger       index   = 0;
     for (Content *content in contents) {
         if (index > 0)
             [params appendString:@","];
-        [params appendFormat:@"\"%@\"", content.id];
+        [params appendFormat:@"\"%@\"", content.uri];
         ++index;
     }
     [params appendString:@"]}"];
@@ -368,15 +417,15 @@
  */
 + (void)insertLink:(Link *)link content:(Content *)content
 {
-    NSMutableString *params = [[NSMutableString alloc] initWithFormat:@"{\"id_from\":\"%@\", \"ids_to\":[\"%@\"], \"tags_id\":[[", content.id, link.contentId];
+    NSMutableString *params = [[NSMutableString alloc] initWithFormat:@"{\"data\":[{\"origin_uri\":\"%@\", \"target_uri\":\"%@\", \"tags_uri\":[", content.uri, link.contentUri];
     NSInteger       index = 0;
     for (Tag *tag in link.tags) {
         if (index > 0)
             [params appendString:@","];
-        [params appendFormat:@"\"%@\"", tag.id];
+        [params appendFormat:@"\"%@\"", tag.uri];
         ++index;
     }
-    [params appendString:@"]]}"];
+    [params appendString:@"]}]}"];
     
     NSData      *postData   = [params dataUsingEncoding:NSUTF8StringEncoding];
     NSString    *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
@@ -401,12 +450,12 @@
  */
 + (void)deleteLinks:(NSMutableArray *)links
 {
-    NSMutableString *params = [[NSMutableString alloc] initWithString:@"{\"links_id\":["];
+    NSMutableString *params = [[NSMutableString alloc] initWithString:@"{\"links_uri\":["];
     NSInteger       index = 0;
     for (Link *link in links) {
         if (index > 0)
             [params appendString:@","];
-        [params appendFormat:@"\"%@\"", link.id];
+        [params appendFormat:@"\"%@\"", link.uri];
         ++index;
     }
     [params appendString:@"]}"];
@@ -448,22 +497,24 @@
     NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
     // Maybe to delete with API 1.5 if id is normal
-    NSString *str = [[NSString alloc] initWithData:responseData encoding:NSISOLatin1StringEncoding];
+    //NSString *str = [[NSString alloc] initWithData:responseData encoding:NSISOLatin1StringEncoding];
+    //NSString *str = responseData;
     
-    NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&error];
-    NSArray *ids = [jsonResponse objectForKey:@"tags_id"];
+    //NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&error];
+    NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:&error];
+    NSArray *uris = [jsonResponse objectForKey:@"tags_uri"];
     
-    return [[ids objectAtIndex:0] objectForKey:@"_id"];
+    return [[uris objectAtIndex:0] objectForKey:@"uri"];
 }
 
 + (void)deleteTags:(NSMutableArray *)tags
 {
-    NSMutableString *params = [[NSMutableString alloc] initWithString:@"{\"tags_id\":["];
+    NSMutableString *params = [[NSMutableString alloc] initWithString:@"{\"tags_uri\":["];
     NSInteger       index = 0;
     for (Link *tag in tags) {
         if (index > 0)
             [params appendString:@","];
-        [params appendFormat:@"\"%@\"", tag.id];
+        [params appendFormat:@"\"%@\"", tag.uri];
         ++index;
     }
     [params appendString:@"]}"];

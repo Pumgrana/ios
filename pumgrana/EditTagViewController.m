@@ -91,11 +91,10 @@
 {
     self.temporaryTag.subject = self.subjectField.text;
     
-    self.temporaryTag.id = [ApiManager insertTag:self.temporaryTag type:self.type];
+    self.temporaryTag.uri = [ApiManager insertTag:self.temporaryTag type:self.type];
     
-    // Id returned by API is bugged ;(
-    //[self.tags addObject:self.temporaryTag];
-    //[self.selectedTags addObject:self.temporaryTag];
+    [self.tags addObject:self.temporaryTag];
+    [self.selectedTags addObject:self.temporaryTag];
     
     [self.doneAlert setMessage:[[NSString alloc] initWithFormat:@"Tag \"%@\" successfully added!", self.temporaryTag.subject]];
     [self.doneAlert show];

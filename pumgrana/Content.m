@@ -17,12 +17,13 @@
  */
 - (id)init
 {
-    self.id = nil;
+    self.uri = nil;
     self.title = [[NSString alloc] init];
     self.summary = [[NSString alloc] init];
-    self.text = [[NSString alloc] init];
+    self.body = [[NSString alloc] init];
     self.tags = [[NSMutableArray alloc] init];
     self.links = [[NSMutableArray alloc] init];
+    self.external = NO;
     
     return self;
 }
@@ -34,7 +35,7 @@
  */
 - (id)initFromJson:(NSDictionary *)json
 {
-    self.id = [json objectForKey:@"_id"];
+    self.uri = [json objectForKey:@"uri"];
     
     self.title = [json objectForKey:@"title"];
     if (self.title == nil) self.title = [[NSString alloc] init];
@@ -42,11 +43,15 @@
     self.summary = [json objectForKey:@"summary"];
     if (self.summary == nil) self.summary = [[NSString alloc] init];
     
-    self.text = [json objectForKey:@"text"];
-    if (self.text == nil) self.text = [[NSString alloc] init];
+    self.body = [json objectForKey:@"body"];
+    if (self.body == nil) self.body = [[NSString alloc] init];
     
     self.tags = [[NSMutableArray alloc] init];
     self.links = [[NSMutableArray alloc] init];
+    
+    NSNumber *jsonExternal = [json objectForKey:@"external"];
+    if (jsonExternal == nil) self.external = YES;
+    else self.external = [jsonExternal boolValue];
     
     return self;
 }
@@ -58,12 +63,13 @@
  */
 - (id)initFromContent:(Content *)content
 {
-    self.id = [[NSString alloc] initWithString:content.id];
+    self.uri = [[NSString alloc] initWithString:content.uri];
     self.title = [[NSString alloc] initWithString:content.title];
     self.summary = [[NSString alloc] initWithString:content.summary];
-    self.text = [[NSString alloc] initWithString:content.text];
+    self.body = [[NSString alloc] initWithString:content.body];
     self.tags = [[NSMutableArray alloc] initWithArray:content.tags];
     self.links = [[NSMutableArray alloc] initWithArray:content.links];
+    self.external = content.external;
     
     return self;
 }
@@ -76,7 +82,7 @@
  */
 - (BOOL)isEqualToContent: (Content *)content
 {
-    return [self.id isEqualToString:content.id];
+    return [self.uri isEqualToString:content.uri];
 }
 
 /**
@@ -86,7 +92,7 @@
  */
 - (BOOL)isEqualToLink:(Link *)link
 {
-    return [self.id isEqualToString:link.contentId];
+    return [self.uri isEqualToString:link.contentUri];
 }
 
 /**
@@ -109,12 +115,12 @@
 
 
 /**
- * Gets the id of the content
- * @return The content's id
+ * Gets the uri of the content
+ * @return The content's uri
  */
-- (NSString *)getContentId
+- (NSString *)getContentUri
 {
-    return self.id;
+    return self.uri;
 }
 
 /**

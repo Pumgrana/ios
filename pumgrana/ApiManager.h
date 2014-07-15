@@ -17,9 +17,10 @@
 
 + (BOOL)checkResponseStatus:(NSDictionary *)response;
 + (id)getJSONResponse:(NSString *)urlParams;
++ (NSString *)urlEncode:(NSString *)urlStr;
 
 + (NSMutableArray *)getContents;
-+ (Content *)getContentWithId:(NSString *)id;
++ (Content *)getContentWithUri:(NSString *)uri;
 + (NSMutableArray *)getTagsWithType:(NSString *)type;
 + (NSMutableArray *)getContentLinks:(Content *)content;
 + (NSMutableArray *)getContentTags:(Content *)content;
@@ -28,6 +29,7 @@
 + (NSMutableArray *)getLinksFilteredByTags:(NSMutableArray *)tags content:(Content *)content;
 
 + (void)updateContent:(Content *)content;
++ (void)updateContentTags:(Content *)content;
 + (NSString *)insertContent:(Content *)content;
 + (void)deleteContents:(NSMutableArray *)contents;
 + (void)insertLink:(Link *)link content:(Content *)content;

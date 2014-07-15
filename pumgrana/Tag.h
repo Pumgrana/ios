@@ -13,7 +13,7 @@
 
 @interface Tag : NSObject
 
-@property (nonatomic, strong) NSString *id;
+@property (nonatomic, strong) NSString *uri;
 @property (nonatomic, strong) NSString *subject;
 
 - (id)init;

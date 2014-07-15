@@ -10,8 +10,19 @@
 #import "Tag.h"
 #import "Link.h"
 #import "Content.h"
+#import "EditTagViewController.h"
 
-@interface ContentEditLinkTagsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface ContentEditLinkTagsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UIActionSheetDelegate>
+
+/**
+ * Button to show the possible actions in navigation bar
+ */
+@property (nonatomic, retain) UIBarButtonItem *actionButton;
+
+/**
+ * Action sheet (popup with different actions)
+ */
+@property (nonatomic, strong) UIActionSheet *actionSheet;
 
 /**
  * Popup to show when an error occurs
@@ -33,6 +44,15 @@
 
 
 /**
+ * The view to create a new tag
+ */
+@property (nonatomic, strong) EditTagViewController *editTagView;
+
+
+
+
+
+/**
  * The link to edit
  */
 @property (nonatomic, strong) Link *link;
@@ -46,6 +66,11 @@
  * Tags to be displayed
  */
 @property (nonatomic, strong) NSMutableArray *tags;
+
+/**
+ * User wants to delete tags
+ */
+@property BOOL isDeleting;
 
 
 

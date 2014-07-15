@@ -17,8 +17,8 @@
  */
 - (id)initFromJson:(NSDictionary *)json
 {
-    self.id = [json objectForKey:@"link_id"];
-    self.contentId = [json objectForKey:@"content_id"];
+    self.uri = [json objectForKey:@"link_uri"];
+    self.contentUri = [json objectForKey:@"content_uri"];
     self.contentTitle = [json objectForKey:@"content_title"];
     self.contentSummary = [json objectForKey:@"content_summary"];
     self.tags = [[NSMutableArray alloc] init];
@@ -33,8 +33,8 @@
  */
 - (id)initFromContent:(Content *)content
 {
-    self.id = nil;
-    self.contentId = content.id;
+    self.uri = nil;
+    self.contentUri = content.uri;
     self.contentTitle = content.title;
     self.contentSummary = content.summary;
     self.tags = [[NSMutableArray alloc] init];
@@ -51,7 +51,7 @@
  */
 - (BOOL)isEqualToLink:(Link *)link
 {
-    return [self.id isEqualToString:link.id];
+    return [self.uri isEqualToString:link.uri];
 }
 
 
@@ -59,12 +59,12 @@
 
 
 /**
- * Gets the id of the linked content
- * @return The linked content's id
+ * Gets the uri of the linked content
+ * @return The linked content's uri
  */
-- (NSString *)getContentId
+- (NSString *)getContentUri
 {
-    return self.contentId;
+    return self.contentUri;
 }
 
 /**

@@ -78,7 +78,7 @@
     
     self.allTags = [ApiManager getTagsWithType:TAG_TYPE_CONTENT];
     
-    if (self.temporaryContent.id == nil) {
+    if (self.temporaryContent.uri == nil) {
         // Creating a new content instead of editing
         
         self.title = @"New";
@@ -86,7 +86,17 @@
     
     self.titleField.text = self.temporaryContent.title;
     self.summaryField.text = self.temporaryContent.summary;
-    self.textField.text = self.temporaryContent.text;
+    self.textField.text = self.temporaryContent.body;
+    
+    if (self.temporaryContent.external) {
+        [self.textField setHidden:YES];
+        self.titleField.enabled = NO;
+        self.summaryField.enabled = NO;
+    } else {
+        [self.textField setHidden:NO];
+        self.titleField.enabled = YES;
+        self.summaryField.enabled = YES;
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -95,7 +105,7 @@
     
     self.temporaryContent.title = self.titleField.text;
     self.temporaryContent.summary = self.summaryField.text;
-    self.temporaryContent.text = self.textField.text;
+    self.temporaryContent.body = self.textField.text;
 }
 
 
@@ -124,14 +134,14 @@
 {
     self.temporaryContent.title = self.titleField.text;
     self.temporaryContent.summary = self.summaryField.text;
-    self.temporaryContent.text = self.textField.text;
+    self.temporaryContent.body = self.textField.text;
     
     NSString *msg;
-    if (self.temporaryContent.id == nil) {
+    if (self.temporaryContent.uri == nil) {
         // Creating
         
-        NSString *id = [ApiManager insertContent:self.temporaryContent];
-        self.temporaryContent.id = id;
+        NSString *uri = [ApiManager insertContent:self.temporaryContent];
+        self.temporaryContent.uri = uri;
         
         for (Link *link in self.temporaryContent.links)
             [ApiManager insertLink:link content:self.temporaryContent];
@@ -140,13 +150,17 @@
     } else {
         // Editing
         
-        [ApiManager updateContent:self.temporaryContent];
+        if (self.temporaryContent.external) {
+            [ApiManager updateContentTags:self.temporaryContent];
+        } else {
+            [ApiManager updateContent:self.temporaryContent];
+        }
         
         for (Link *link in self.temporaryContent.links) {
             BOOL found = NO;
             
             for (Link *savedLink in self.savedLinks) {
-                if ([savedLink.contentId isEqualToString:link.contentId] && [link.tags count] > 0) {
+                if ([savedLink.contentUri isEqualToString:link.contentUri] && [link.tags count] > 0) {
                     // Link has been modified
                     
                     [ApiManager deleteLinks:[[NSMutableArray alloc] initWithObjects:savedLink, nil]];
@@ -166,7 +180,7 @@
             BOOL found = NO;
             
             for (Link *link in self.temporaryContent.links) {
-                if ([savedLink.contentId isEqualToString:link.contentId])
+                if ([savedLink.contentUri isEqualToString:link.contentUri])
                     found = YES;
             }
             

@@ -14,8 +14,8 @@
 
 @interface Link : NSObject <PartialContentProtocol>
 
-@property (nonatomic, strong) NSString  *id;
-@property (nonatomic, strong) NSString  *contentId;
+@property (nonatomic, strong) NSString  *uri;
+@property (nonatomic, strong) NSString  *contentUri;
 @property (nonatomic, strong) NSString  *contentTitle;
 @property (nonatomic, strong) NSString  *contentSummary;
 

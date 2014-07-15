@@ -10,7 +10,7 @@
 
 @protocol PartialContentProtocol <NSObject>
 
-- (NSString *)getContentId;
+- (NSString *)getContentUri;
 - (NSString *)getContentTitle;
 - (NSString *)getContentSummary;
 

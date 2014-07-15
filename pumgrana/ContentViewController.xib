@@ -6,6 +6,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContentViewController">
             <connections>
+                <outlet property="bodyWebView" destination="zO1-dU-1HT" id="QaT-lR-Fej"/>
                 <outlet property="summaryLabel" destination="ypK-xt-emo" id="Bmx-Uh-OM0"/>
                 <outlet property="textTextView" destination="yov-Sw-ggm" id="OCz-yu-riC"/>
                 <outlet property="titleLabel" destination="Dla-iI-vid" id="qAn-0m-m63"/>
@@ -59,6 +60,11 @@
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zO1-dU-1HT">
+                    <rect key="frame" x="20" y="129" width="280" height="381"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                </webView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

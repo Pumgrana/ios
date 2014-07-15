@@ -15,12 +15,13 @@
 
 @interface Content : NSObject <PartialContentProtocol>
 
-@property (nonatomic, strong) NSString *id;
+@property (nonatomic, strong) NSString *uri;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *summary;
-@property (nonatomic, strong) NSString *text;
+@property (nonatomic, strong) NSString *body;
 @property (nonatomic, strong) NSMutableArray *tags;
 @property (nonatomic, strong) NSMutableArray *links;
+@property BOOL external;
 
 
 

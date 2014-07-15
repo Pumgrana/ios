@@ -80,7 +80,7 @@
 {
     [super viewWillAppear:animated];
     
-    [self loadContentWithId:self.content.id];
+    [self loadContentWithUri:self.content.uri];
 }
 
 
@@ -164,18 +164,28 @@
 
 /**
  * Loads a new content in the view
- * @param id The id of the content
+ * @param uri The uri of the content
  */
-- (void)loadContentWithId:(NSString *)id
+- (void)loadContentWithUri:(NSString *)uri
 {
-    self.content = [ApiManager getContentWithId:id];
+    self.content = [ApiManager getContentWithUri:uri];
     self.content.tags = [ApiManager getContentTags:self.content];
     self.content.links = [ApiManager getContentLinks:self.content];
     
     self.title = self.content.title;
     self.titleLabel.text = self.content.title;
     self.summaryLabel.text = self.content.summary;
-    self.textTextView.text = self.content.text;
+    self.textTextView.text = self.content.body;
+    
+    if (self.content.external) {
+        [self.textTextView setHidden:YES];
+        [self.bodyWebView setHidden:NO];
+        
+        [self.bodyWebView loadHTMLString:self.content.body baseURL:[[NSBundle mainBundle] resourceURL]];
+    } else {
+        [self.textTextView setHidden:NO];
+        [self.bodyWebView setHidden:YES];
+    }
 }
 
 @end
