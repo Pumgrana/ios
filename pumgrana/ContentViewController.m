@@ -64,6 +64,8 @@
         self.navigationItem.rightBarButtonItem = self.moreButton;
     
     self.textTextView.editable = NO;
+    
+    [self.loadingView setHidden:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -81,6 +83,62 @@
     [super viewWillAppear:animated];
     
     [self loadContentWithUri:self.content.uri];
+}
+
+
+
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    self.receivedData = [[NSMutableData alloc] init];
+    [self.loadingView setHidden:NO];
+    [self.loadingView startAnimating];
+    self.title = @"Loading";
+    self.titleLabel.text = @"Loading";
+    self.summaryLabel.text = @"Loading";
+    self.textTextView.text = @"Loading";
+    [self.bodyWebView setHidden:YES];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    [self.receivedData appendData:data];
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+{
+    return nil;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    self.content = [ApiManager getContentWithUri_Data:self.receivedData];
+    self.content.tags = [ApiManager getContentTags:self.content];
+    self.content.links = [ApiManager getContentLinks:self.content];
+    
+    self.title = self.content.title;
+    self.titleLabel.text = self.content.title;
+    self.summaryLabel.text = self.content.summary;
+    self.textTextView.text = self.content.body;
+    
+    if (self.content.external) {
+        [self.textTextView setHidden:YES];
+        [self.bodyWebView setHidden:NO];
+        
+        [self.bodyWebView loadHTMLString:self.content.body baseURL:[[NSBundle mainBundle] resourceURL]];
+    } else {
+        [self.textTextView setHidden:NO];
+        [self.bodyWebView setHidden:YES];
+    }
+    
+    [self.loadingView setHidden:YES];
+    [self.loadingView stopAnimating];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    NSLog(@"Fail");
 }
 
 
@@ -168,24 +226,9 @@
  */
 - (void)loadContentWithUri:(NSString *)uri
 {
-    self.content = [ApiManager getContentWithUri:uri];
-    self.content.tags = [ApiManager getContentTags:self.content];
-    self.content.links = [ApiManager getContentLinks:self.content];
-    
-    self.title = self.content.title;
-    self.titleLabel.text = self.content.title;
-    self.summaryLabel.text = self.content.summary;
-    self.textTextView.text = self.content.body;
-    
-    if (self.content.external) {
-        [self.textTextView setHidden:YES];
-        [self.bodyWebView setHidden:NO];
-        
-        [self.bodyWebView loadHTMLString:self.content.body baseURL:[[NSBundle mainBundle] resourceURL]];
-    } else {
-        [self.textTextView setHidden:NO];
-        [self.bodyWebView setHidden:YES];
-    }
+    [ApiManager getContentWithUri_Connection:uri delegate:self];
+    self.content = [[Content alloc] init];
+    self.content.uri = uri;
 }
 
 @end

@@ -37,4 +37,11 @@
 + (NSString *)insertTag:(Tag *)tag type:(NSString *)type;
 + (void)deleteTags:(NSMutableArray *)tags;
 
++ (void)getContents_Connection:(id)delegate;
++ (NSMutableArray *)getContents_Data:(NSData *)data;
++ (void)getContentsFilteredByTags_Connection:(NSMutableArray *)tags delegate:(id)delegate;
++ (NSMutableArray *)getContentsFilteredByTags_Data:(NSData *)data;
++ (void)getContentWithUri_Connection:(NSString *)uri delegate:(id)delegate;
++ (Content *)getContentWithUri_Data:(NSData *)data;
+
 @end

@@ -536,4 +536,81 @@
     [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 }
 
++ (void)getContents_Connection:(id)delegate
+{
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[API_URL stringByAppendingString:@"/content/list_content/"]]];
+    [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
+}
+
++ (NSMutableArray *)getContents_Data:(NSData *)data
+{
+    NSMutableArray *ret = [[NSMutableArray alloc] init];
+    id json             = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+    
+    if ([ApiManager checkResponseStatus:json]) {
+        NSArray *contents = [json objectForKey:@"contents"];
+        
+        if (![contents isEqual:[NSNull null]]) {
+            for (NSDictionary *content in contents) {
+                Content *c = [[Content alloc] initFromJson:content];
+                [ret addObject:c];
+            }
+        }
+    }
+    
+    return ret;
+}
+
++ (void)getContentsFilteredByTags_Connection:(NSMutableArray *)tags delegate:(id)delegate
+{
+    NSMutableString *paramTags  = [[NSMutableString alloc] init];
+    for (Tag *tag in tags) {
+        [paramTags appendFormat:@"%@/", [ApiManager urlEncode:tag.uri]];
+    }
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[API_URL stringByAppendingFormat:@"/content/list_content//%@", paramTags]]];
+    [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
+}
+
++ (NSMutableArray *)getContentsFilteredByTags_Data:(NSData *)data
+{
+    NSMutableArray  *contents   = [[NSMutableArray alloc] init];
+    NSDictionary    *json       = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+    
+    if ([ApiManager checkResponseStatus:json]) {
+        NSArray *contentArray = [json objectForKey:@"contents"];
+        
+        if (![contentArray isEqual:[NSNull null]]) {
+            for (NSDictionary *content in contentArray) {
+                Content *newContent = [[Content alloc] initFromJson:content];
+                [contents addObject:newContent];
+            }
+        }
+    }
+    
+    return contents;
+}
+
++ (void)getContentWithUri_Connection:(NSString *)uri delegate:(id)delegate
+{
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[API_URL stringByAppendingFormat:@"/content/detail/%@", [ApiManager urlEncode:uri]]]];
+    [[NSURLConnection alloc] initWithRequest:request delegate:delegate];
+}
+
++ (Content *)getContentWithUri_Data:(NSData *)data
+{
+    Content *content = [[Content alloc] init];
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+    
+    if ([ApiManager checkResponseStatus:json]) {
+        NSArray *contentArray = [json objectForKey:@"contents"];
+        
+        if (![contentArray isEqual:[NSNull null]] && [contentArray count] > 0) {
+            content = [[Content alloc] initFromJson:[contentArray objectAtIndex:0]];
+        }
+    }
+    
+    return content;
+}
+
 @end

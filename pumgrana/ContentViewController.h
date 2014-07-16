@@ -12,7 +12,7 @@
 
 @class ContentListViewController, ContentEditViewController;
 
-@interface ContentViewController : UIViewController <UIActionSheetDelegate, UIAlertViewDelegate>
+@interface ContentViewController : UIViewController <UIActionSheetDelegate, UIAlertViewDelegate, NSURLConnectionDelegate>
 
 /**
  * "More" button in navigation bar
@@ -49,6 +49,12 @@
  */
 @property (weak, nonatomic) IBOutlet UIWebView *bodyWebView;
 
+/**
+ * Loading circle
+ */
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingView;
+
+
 
 
 
@@ -75,6 +81,11 @@
  * The content to display.
  */
 @property (nonatomic, strong) Content *content;
+
+/**
+ * Data received asynchronously
+ */
+@property (nonatomic, strong) NSMutableData *receivedData;
 
 
 

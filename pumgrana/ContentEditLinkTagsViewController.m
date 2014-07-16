@@ -26,6 +26,7 @@
         self.content = nil;
         self.tags = [[NSMutableArray alloc] init];
         self.isDeleting = NO;
+        self.selectedTag = nil;
         
         self.editTagView = nil;
         
@@ -38,6 +39,9 @@
         
         self.actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Add tag", @"Delete tag", nil];
         self.actionSheet.tag = 1;
+        
+        self.tagDeleteAlert = [[UIAlertView alloc] initWithTitle:nil message:@"" delegate:self cancelButtonTitle:nil otherButtonTitles:@"Yes", @"No", nil];
+        self.tagDeleteAlert.tag = 2;
     }
     return self;
 }
@@ -143,7 +147,13 @@
  */
 - (IBAction)buttonTagRowDeletePush:(id)sender
 {
+    UIButton *button = sender;
+    Tag *tag = [self.tags objectAtIndex:button.tag];
     
+    self.selectedTag = tag;
+    
+    [self.tagDeleteAlert setMessage:[[NSString alloc] initWithFormat:@"Are you sure you want to delete the tag \"%@\"?", tag.subject]];
+    [self.tagDeleteAlert show];
 }
 
 /**
@@ -209,6 +219,35 @@
  */
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if (alertView.tag == 2) {
+        // Delete tag alert
+        
+        if (buttonIndex == 0) {
+            // Yes
+            
+            [ApiManager deleteTags:[[NSMutableArray alloc] initWithObjects:self.selectedTag, nil]];
+            
+            for (Tag *t in self.tags) {
+                if ([t isEqualToTag:self.selectedTag]) {
+                    [self.tags removeObject:t];
+                    break ;
+                }
+            }
+            
+            for (Tag *t in self.link.tags) {
+                if ([t isEqualToTag:self.selectedTag]) {
+                    [self.link.tags removeObject:t];
+                    break ;
+                }
+            }
+            
+            [self.tagTableView reloadData];
+        } else {
+            // No
+        }
+        
+        self.selectedTag = nil;
+    }
 }
 
 /**

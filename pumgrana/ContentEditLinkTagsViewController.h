@@ -15,6 +15,11 @@
 @interface ContentEditLinkTagsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UIActionSheetDelegate>
 
 /**
+ * Popup displayed when user wants to delete a tag
+ */
+@property (nonatomic, strong) UIAlertView *tagDeleteAlert;
+
+/**
  * Button to show the possible actions in navigation bar
  */
 @property (nonatomic, retain) UIBarButtonItem *actionButton;
@@ -71,6 +76,11 @@
  * User wants to delete tags
  */
 @property BOOL isDeleting;
+
+/**
+ * Selected tag to delete
+ */
+@property Tag *selectedTag;
 
 
 

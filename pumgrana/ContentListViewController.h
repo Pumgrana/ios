@@ -14,7 +14,7 @@
 
 @class TagListViewController, ContentViewController, ContentEditViewController;
 
-@interface ContentListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ContentListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, NSURLConnectionDelegate>
 
 /**
  * Button to add a content in navigation bar
@@ -55,6 +55,10 @@
  */
 @property (nonatomic, strong) NSMutableArray *filteredTags;
 
+/**
+ * Data received asynchronously
+ */
+@property (nonatomic, strong) NSMutableData *receivedData;
 
 
 

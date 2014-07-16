@@ -116,7 +116,9 @@
         
         self.navigationItem.rightBarButtonItem = self.addContentButton;
         
-        self.contentsToShow = [ApiManager getContentsFilteredByTags:self.filteredTags];
+        self.contentsToShow = [[NSMutableArray alloc] init];
+        [ApiManager getContentsFilteredByTags_Connection:self.filteredTags delegate:self];
+        
         self.allTags = [ApiManager getTagsWithType:TAG_TYPE_CONTENT];
     } else {
         // Case 2: Displaying a content's links
@@ -128,6 +130,36 @@
     [self updateTagListLabel];
     
     [self.contentTableView reloadData];
+}
+
+
+
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    self.receivedData = [[NSMutableData alloc] init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    [self.receivedData appendData:data];
+}
+
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+{
+    return nil;
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    self.contentsToShow = [ApiManager getContentsFilteredByTags_Data:self.receivedData];
+    [self.contentTableView reloadData];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    NSLog(@"Fail");
 }
 
 

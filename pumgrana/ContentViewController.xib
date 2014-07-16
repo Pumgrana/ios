@@ -7,6 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContentViewController">
             <connections>
                 <outlet property="bodyWebView" destination="zO1-dU-1HT" id="QaT-lR-Fej"/>
+                <outlet property="loadingView" destination="9fM-C5-BmY" id="fF9-xW-bf4"/>
                 <outlet property="summaryLabel" destination="ypK-xt-emo" id="Bmx-Uh-OM0"/>
                 <outlet property="textTextView" destination="yov-Sw-ggm" id="OCz-yu-riC"/>
                 <outlet property="titleLabel" destination="Dla-iI-vid" id="qAn-0m-m63"/>
@@ -65,6 +66,10 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                 </webView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9fM-C5-BmY">
+                    <rect key="frame" x="150" y="310" width="20" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
